@@ -10,7 +10,8 @@ only use would be ssh / gpg / cryptsetup...
 
 need to auto log root on tty1 so it can prompt for sys wide key crypt
 the idea being you dont need a password to login it asks you for one
-its not a very secure method of locking keys being lazy once gets every node owned...
+its not a very secure method of locking keys being lazy gets every node owned on one mistake...
+but the alternative rebuilding archiso + key share folder would take far to long to build all the images
 unless blank passwords rm -r /all/keys.... so quick boot removes network functionality 
 could expand to weak passwords doing the same and is the only solution to the lulz of 
 auto login / lack of any hardened setup 
