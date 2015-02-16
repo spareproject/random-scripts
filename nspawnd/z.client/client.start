@@ -1,0 +1,11 @@
+#!/bin/env bash
+
+LISTENING=12723 
+
+function listener {
+  if [[ ! -p client.socket ]]; then mkfifo client.socket; fi
+  for (( ;; )); do nc -vulnzp ${LISTENING} 1>/dev/null 2>client.socket; done
+}
+listener &
+
+

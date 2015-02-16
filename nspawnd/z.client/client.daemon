@@ -1,0 +1,11 @@
+#!/bin/env bash
+SERVER_SOCKET=sockets/127.0.0.1.socket
+
+while true; do
+  if read line <${SERVER_SOCKET}; then
+    echo ${line}
+  fi
+done
+
+
+

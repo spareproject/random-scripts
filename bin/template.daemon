@@ -1,0 +1,24 @@
+#!/bin/env bash
+SERVER_SOCKET="sockets/server/server.socket"
+SERVER_LISTENING=12723
+AVAILABLE=( 12724 12725 12726 12727 12728 12729 12730 12731 12732 12733 )
+declare -A USED
+declare -A BLACKLIST
+declare -A WHITELIST
+while true; do
+  if read line <${SERVER_SOCKET}; then
+   REQUEST=`echo $line | sed -r 's/^.{21}//' | sed -r 's/:.*$//'`
+   if [[ ${USED[${REQUEST}]} ]]; then echo "${USED[${REQUEST}]}" > /dev/udp/$REQUEST/12723; continue; fi
+    if [[ ${#AVAILABLE[@]} -gt 0 ]];then
+      CACHE=()
+      PORT=${AVAILABLE[0]}
+      USED+=([$REQUEST]=${PORT})
+      for ((i=1;i<=${#AVAILABLE[@]};i++));do CACHE+=(${AVAILABLE[${i}]});done; AVAILABLE=("${CACHE[@]}")
+      echo "${PORT}" > /dev/udp/${REQUEST}/12723
+      if [[ ! -p sockets/${REQUEST}.socket ]]; then mkfifo sockets/${REQUEST}.socket; fi
+      for (( ; ; ));do nc -vulnzp ${PORT} 2>/dev/null 1>sockets/${REQUEST}.socket;done &
+      source client0.daemon &
+    else echo "server_full" > /dev/udp/${REQUEST}/13723;fi
+  fi
+done
+

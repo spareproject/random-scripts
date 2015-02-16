@@ -1,0 +1,30 @@
+so the first bit looks like you cant go backwards... ie random binary to numeric (could use a header to dictate tick length)
+but really all the values in that first string should be location coordinatees which will always be length xxx 0-2,0-9,0-9 <256 because im still using 8 bit
+
+^ turns out adding the positional references breaks everything...
+
+10394670138467036419059631703150917364098
+xxx.x.xxx.xx.xxx.xxx.xxx.x.xxx.xx.xxx.xxx 
+x.xx.xxxxx.x.xxx.x.xxx.xxxx.xx.x.x.x.xxxx 
+^ possible new key... alot smaller than the other 3 places i could try and stick them... and is easier to monitor complexity
+
+123
+-----------------------------
+00000001,00000010,00000011
+7,1,6,1,7,1,1
+-----------------------------
+00000001,00010111
+7,1,3,1,0,1,1,1
+-----------------------------
+00001100,00000011
+4,1,1,8,1,1
+-----------------------------
+01111011
+0,1,1,1,1,0,1,1
+-----------------------------
+
+7161711=123
+71310111=123
+411811=123
+01111011=123
+

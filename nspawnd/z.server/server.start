@@ -1,0 +1,30 @@
+#!/bin/env bash
+SERVER_SOCKET="server.socket"
+SERVER_LISTENING=12723
+AVAILABLE=( 12724 12725 12726 12727 12728 12729 12730 12731 12732 12733 )
+declare -A USED
+declare -A BLACKLIST
+declare -A WHITELIST
+if [[ ! -p ${SERVER_SOCKET} ]]; then mkfifo ${SERVER_SOCKET}; fi; for (( ;; )); do nc -vulnz -s 10.0.0.1 -p ${SERVER_LISTENING} 1>/dev/null 2>${SERVER_SOCKET}; done &
+while true; do
+  if read line <${SERVER_SOCKET}; then
+   REQUEST=`echo $line | sed -r 's/^.{21}//' | sed -r 's/:.*$//'`
+   if [[ ${USED[${REQUEST}]} ]]; then echo "${USED[${REQUEST}]}" > /dev/udp/${REQUEST}/12723; continue; fi
+   if [[ ${#AVAILABLE[@]} != 0 ]];then
+     CACHE=()
+     PORT=${AVAILABLE[0]}
+     USED+=([$REQUEST]=${PORT})
+     for ((i=1;i<=${#AVAILABLE[@]};i++));do CACHE+=(${AVAILABLE[${i}]});done; AVAILABLE=("${CACHE[@]}")
+     echo "${PORT}" > /dev/udp/${REQUEST}/12723
+    else echo "server_full" > /dev/udp/${REQUEST}/12723;fi
+    clear; cat /etc/banner
+    echo "##########################"
+    echo "AVILABLE:"
+    echo ${AVAILABLE[@]}
+    echo "##########################"
+    echo "CONNECTIONS:"
+    for i in ${!USED[@]};do echo "ip: ${i} port: ${USED[${i}]}";done
+    echo "##########################"
+  fi
+done
+
