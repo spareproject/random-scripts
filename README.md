@@ -1,5 +1,13 @@
 spawncamping-ninja
 ==================
+##################
+
+things to do...
+add keymap
+add random password gen from random key file (need to switch xor gate to force larger size)
+add verify for files encrypted with the above (only way to stop key fails + rate limiting lock out on)
+
+##################
 a.updates was an old copy of /bin /shrug its got some iptables stuff in rest is pretty random and legacy reminders for syntax i couldnt remember
 
 about time i did something useful... 

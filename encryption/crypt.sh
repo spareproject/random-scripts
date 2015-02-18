@@ -8,7 +8,6 @@ ${0} - help
 -i - input file   defaults to read prompt || takes file
 -o - output file  defaults to stdout || defaults to input.crypt || takes file
 -p - password     defaults to read prompt || takes file
-assumes current directory or takes full path based on searching for / in input... / output... < - havent found a way to strip this yet
 "
 exit ${1} 
 }
@@ -23,7 +22,6 @@ while getopts 'i:o:p:h' arg;do
 done
 echo "
 debuggery...
-GATEWAY=${GATEWAY}
 INPUT=${INPUT}
 OUTPUT=${OUTPUT}
 PASSWORD=${PASSWORD}
@@ -34,30 +32,13 @@ if [[ -z ${PASSWORD} ]];then
   echo -en "password: ";read password;echo ""
   for i in `echo ${password} | grep -o .`;do password_int_array+=(`char-to-int ${i}`);done
   for i in ${password_int_array[@]};do for o in `int-to-binary ${i} | grep -o .`;do password_binary_array+=(${o});done;done
-  for ((i=0;i<${#password_binary_array[@]};i++));do
-    if [[ ${i} -lt $((${#password_binary_array[@]} / 2)) ]];then first_half+=(${password_binary_array[${i}]});fi
-    if [[ ${i} -ge $((${#password_binary_array[@]} / 2)) ]];then second_half+=(${password_binary_array[${i}]});fi
-  done
 elif [[ -f ${PASSWORD} ]];then
-  for i in `xxd -p ${PASSWORD} | grep -o .`;do
-    if [[ ${i} == "0" ]];then password_binary_array+=(0 0 0 0);fi
-    if [[ ${i} == "1" ]];then password_binary_array+=(0 0 0 1);fi
-    if [[ ${i} == "2" ]];then password_binary_array+=(0 0 1 0);fi
-    if [[ ${i} == "3" ]];then password_binary_array+=(0 0 1 1);fi
-    if [[ ${i} == "4" ]];then password_binary_array+=(0 1 0 0);fi
-    if [[ ${i} == "5" ]];then password_binary_array+=(0 1 0 1);fi
-    if [[ ${i} == "6" ]];then password_binary_array+=(0 1 1 0);fi
-    if [[ ${i} == "7" ]];then password_binary_array+=(0 1 1 1);fi
-    if [[ ${i} == "8" ]];then password_binary_array+=(1 0 0 0);fi
-    if [[ ${i} == "9" ]];then password_binary_array+=(1 0 0 1);fi
-    if [[ ${i} == "a" ]];then password_binary_array+=(1 0 1 0);fi
-    if [[ ${i} == "b" ]];then password_binary_array+=(1 0 1 1);fi
-    if [[ ${i} == "c" ]];then password_binary_array+=(1 1 0 0);fi
-    if [[ ${i} == "d" ]];then password_binary_array+=(1 1 0 1);fi
-    if [[ ${i} == "e" ]];then password_binary_array+=(1 1 1 0);fi
-    if [[ ${i} == "f" ]];then password_binary_array+=(1 1 1 1);fi
-  done
+  for i in `xxd -p ${PASSWORD} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do password_binary_array+=(${o});done;done
 fi
+for ((i=0;i<${#password_binary_array[@]};i++));do
+  if [[ ${i} -lt $((${#password_binary_array[@]} / 2)) ]];then first_half+=(${password_binary_array[${i}]});fi
+  if [[ ${i} -ge $((${#password_binary_array[@]} / 2)) ]];then second_half+=(${password_binary_array[${i}]});fi
+done
 ##########################################################################################################################################################################################
 # take input
 if [[ -z ${INPUT} ]];then
@@ -65,24 +46,7 @@ if [[ -z ${INPUT} ]];then
   for i in `echo $input | grep -o .`;do input_int_array+=(`char-to-int ${i}`);done
   for i in ${input_int_array[@]};do for o in `int-to-binary ${i} | grep -o .`;do input_binary_array+=(${o});done;done
 elif [[ -f ${INPUT} ]];then
-  for i in `xxd -p ${1} | grep -o .`;do
-    if [[ ${i} == "0" ]];then input_binary_array+=(0 0 0 0);fi
-    if [[ ${i} == "1" ]];then input_binary_array+=(0 0 0 1);fi
-    if [[ ${i} == "2" ]];then input_binary_array+=(0 0 1 0);fi
-    if [[ ${i} == "3" ]];then input_binary_array+=(0 0 1 1);fi
-    if [[ ${i} == "4" ]];then input_binary_array+=(0 1 0 0);fi
-    if [[ ${i} == "5" ]];then input_binary_array+=(0 1 0 1);fi
-    if [[ ${i} == "6" ]];then input_binary_array+=(0 1 1 0);fi
-    if [[ ${i} == "7" ]];then input_binary_array+=(0 1 1 1);fi
-    if [[ ${i} == "8" ]];then input_binary_array+=(1 0 0 0);fi
-    if [[ ${i} == "9" ]];then input_binary_array+=(1 0 0 1);fi
-    if [[ ${i} == "a" ]];then input_binary_array+=(1 0 1 0);fi
-    if [[ ${i} == "b" ]];then input_binary_array+=(1 0 1 1);fi
-    if [[ ${i} == "c" ]];then input_binary_array+=(1 1 0 0);fi
-    if [[ ${i} == "d" ]];then input_binary_array+=(1 1 0 1);fi
-    if [[ ${i} == "e" ]];then input_binary_array+=(1 1 1 0);fi
-    if [[ ${i} == "f" ]];then input_binary_array+=(1 1 1 1);fi
-  done
+  for i in `xxd -p ${INPUT} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do input_binary_array+=(${o});done;done
 fi
 ##########################################################################################################################################################################################
 # encrypt/decrypt
@@ -112,9 +76,8 @@ fi
     ((count++))
   done
 ##########################################################################################################################################################################################
-# print debuggery... 
-if [[ -z ${OUTPUT} ]];then
-  count=0;cache=""
+# print debuggery...
+count=0;cache=""
   for ((i=0;i<=${#output_binary_array[@]};i++));do
     cache+=${output_binary_array[${i}]}
     ((count++))
@@ -122,16 +85,20 @@ if [[ -z ${OUTPUT} ]];then
   done
   for i in ${output_byte_array[@]}; do output_int_array+=(`binary-to-int ${i}`);done
   for i in ${output_int_array[@]}; do output_string+=`int-to-char ${i}`;done
+if [[ -z ${OUTPUT} ]];then
+    echo "${output_string}" 
   elif [[ ! -f ${OUTPUT} ]];then
-    echo ${output_string} > ${input}.crypt
+    echo ${output_string} > ${OUTPUT}
 fi
-
-  echo "password... ${password}"
-  echo "password_int_array... ${password_int_array[@]}"
-  echo "password_binary_array... ${password_binary_array[@]}"
-  echo "input... ${input}"
-  echo "input_int_array... ${input_int_array[@]}"
-  echo "input_binary_array... ${input_binary_array[@]}"
-  echo "output_byte_array... ${output_byte_array[@]}"
-  echo "output_int_array... ${output_int_array[@]}"
-  echo "output_string... ${output_string}"
+##########################################################################################################################################################################################
+#echo "password... ${password}"
+#echo "password_int_array... ${password_int_array[@]}"
+#echo "password_binary_array... ${password_binary_array[@]}"
+#echo "first_half... ${first_half[@]}"
+#echo "second_half... ${second_half[@]}"
+#echo "input... ${input}"
+#echo "input_int_array... ${input_int_array[@]}"
+#echo "input_binary_array... ${input_binary_array[@]}"
+#echo "output_byte_array... ${output_byte_array[@]}"
+#echo "output_int_array... ${output_int_array[@]}"
+#echo "output_string... ${output_string}"

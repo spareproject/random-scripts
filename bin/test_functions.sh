@@ -24,3 +24,10 @@ done
 
 echo "password binary array..."
 echo ${password_binary_array[@]}
+
+echo "hmmm needs cleaning echo ${PWD}"
+for i in `xxd -p ./test | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do testing+=(${o});done;done
+
+echo "testing: ${testing[@]}"
+
+

@@ -22,4 +22,21 @@ for i in `echo ${holder} | grep -o .`;do
   done
   echo ${int}
 }
-echo "importing functions.sh"
+function hex-to-binary {
+if [[ ${1} == "0" ]];then echo 0000;fi
+if [[ ${1} == "1" ]];then echo 0001;fi
+if [[ ${1} == "2" ]];then echo 0010;fi
+if [[ ${1} == "3" ]];then echo 0011;fi
+if [[ ${1} == "4" ]];then echo 0100;fi
+if [[ ${1} == "5" ]];then echo 0101;fi
+if [[ ${1} == "6" ]];then echo 0110;fi
+if [[ ${1} == "7" ]];then echo 0111;fi
+if [[ ${1} == "8" ]];then echo 1000;fi
+if [[ ${1} == "9" ]];then echo 1001;fi
+if [[ ${1} == "a" ]];then echo 1010;fi
+if [[ ${1} == "b" ]];then echo 1011;fi
+if [[ ${1} == "c" ]];then echo 1100;fi
+if [[ ${1} == "d" ]];then echo 1101;fi
+if [[ ${1} == "e" ]];then echo 1110;fi
+if [[ ${1} == "f" ]];then echo 1111;fi
+}
