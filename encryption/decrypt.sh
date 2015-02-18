@@ -32,7 +32,7 @@ for i in `xxd -p ${1} | grep -o .`;do
 done
 fi
 ##########################################################################################################################################################################################
-count=0;output_message=()
+count=0
 for ((i=0;i<${#input_binary_array[@]};i++));do
   if [[ ${count} == ${#first_half[@]} ]]; then count=0; fi
   if [[ ${first_half[${count}]} == 0 && ${second_half[${count}]} == 0 ]]; then 

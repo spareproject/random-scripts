@@ -11,7 +11,7 @@ so i have loads of unencrypted keys all over the iso for easy debugging... ssh /
 going to script an exectuable into .bash_profile to read user input on login for root tty1 auto login
 if left empty it wipes all the keys, quick boot no archiso network access
 if it passes a sanity check...
-it encrypts all the keys and removes originals 
+it encrypts all the keys and removes originals (my use case is running in ram)
 alias for every command that uses a key 
 takes input decrypts, check the clear text is valid, background sleep 3 rm clear text key, attempt original command... 
 
@@ -19,11 +19,12 @@ planning on
 using a /tmp/keys folder with x number of random keys to encrypt against... 
 can use the same password have it xor against a random key pick on boot to generate a temp random password of fixed length
 just to increase the amount of bruteforce needed to crack vs how easy it is for me to find it with the right password
-+ it will allow me to beat the human memorable password length fail in theory by forcing xor to a specified key length
+ (plus - cant use the plug symbol in git without bullet pointing it : /) 
+it will allow me to beat the human memorable password length fail in theory by forcing xor to a specified key length
 cons: means leaving a vaild file check in the crypted files before attempting original command
 
 bit rushed and a quick throw up and depends entirly on being able to remove the original squashfs filesystem 
-^writing that down was probably a bad idea since its still being used
+^writing that down was probably a bad idea since its still being used 
 
 means i need to pull everything out of multi-user.target and start / stop it based on quick boot or archiso network boot
 
