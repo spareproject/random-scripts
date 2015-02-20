@@ -1,11 +1,17 @@
 spawncamping-ninja
 ==================
 ##################
+20/2/15 -
+need to split all this... 
+key file only works for archiso booting cant combine them without making it useless for static install
+
+
+##################
 
 things to do...
 add keymap
 add random password gen from random key file (need to switch xor gate to force larger size)
-add verify for files encrypted with the above (only way to stop key fails + rate limiting lock out on)
+add verify for files encrypted with the above (only way to stop key fails + rate limiting lock out)
 
 ##################
 a.updates was an old copy of /bin /shrug its got some iptables stuff in rest is pretty random and legacy reminders for syntax i couldnt remember
