@@ -5,6 +5,8 @@ spawncamping-ninja
 need to split all this... 
 key file only works for archiso booting cant combine them without making it useless for static install
 
+dont execute random scripts if you cant prove they work none of this currently works... 
+
 
 ##################
 

@@ -21,7 +21,8 @@ while getopts 'i:o:hde' arg;do
 done
 #requres these 3 things or it kicks off...
 if [[ -z ${INPUT} && -z ${OUTPUT} && -z ${SPLIT} ]];then usage 0;fi
-
+if [[ -f ${OUTPUT} ]];then usage 0;fi
+if [[ ! -f ${INPUT} ]];then usage 0;fi 
 #selecting encrypt...
 if [[ ${SPLIT} == "encrypt" ]];then
 ##########################################################################################################################################################################################
@@ -127,7 +128,7 @@ done
 for i in ${output_byte_array[@]}; do output_int_array+=(`binary-to-int ${i}`);done
 for i in ${output_int_array[@]}; do output_string+=`int-to-char ${i}`;done
 
-#if [[ ! -f ${OUTPUT} ]];then echo ${output_string} > ${OUTPUT};fi
+echo ${output_string} > ${OUTPUT}
 echo "##################################################################################################################################################################################"
 echo "
 CHECKPOINT1
@@ -142,6 +143,9 @@ output_string=${output_string[@]}
 exit 
 echo "##################################################################################################################################################################################"
 ##########################################################################################################################################################################################
+
+# current encrypt example done with key3... so hardcoding to help debuggery having a break first tho
+
 ##########################################################################################################################################################################################
 elif [[ ${SPLIT} == decrypt ]];then
 ##########################################################################################################################################################################################
@@ -154,13 +158,12 @@ for ((i=0;i<${#password_binary_array[@]};i++));do
   if [[ ${i} -ge $((${#password_binary_array[@]} / 2)) ]];then password_second_half+=(${password_binary_array[${i}]});fi
 done
 # take the input file...
-#if [[ -f ${INPUT} ]];then for i in `xxd -p ${INPUT} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do input_binary_array+=(${o});done;done;fi
+if [[ -f ${INPUT} ]];then for i in `xxd -p ${INPUT} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do input_binary_array+=(${o});done;done;fi
 ##########################################################################################################################################################################################
-# in this loop i need to generate the random key... and decrypt the folder validty test toggle or repeat... and testing will be a bitch... : / inifinite loopage!
-for x in `ls ./keys/`;do
-if [[ -f ./keys/${x} ]];then
-for y in `xxd -p ./keys/${x} | grep -o .`;do
-for z in `hex-to-binary ./keys/${y} | grep -o .`;do key_binary_array+=(${z});done;done;fi
+#for x in `ls ./keys/`;do 
+#if [[ -f ./keys/${x} ]];then for y in `xxd -p ./keys/${x} | grep -o .`;do for z in `hex-to-binary ${y} | grep -o .`;do key_binary_array+=(${z});done;done;fi
+
+for y in `xxd -p ./keys/key3 | grep -o .`;do for z in `hex-to-binary ${y} | grep -o .`;do key_binary_array+=(${z});done;done;fi
 
 for ((i=0;i<${#key_binary_array[@]};i++));do
   if [[ ${count} == ${#password_first_half[@]} ]]; then count=0; fi
@@ -187,6 +190,12 @@ for ((i=0;i<${#key_binary_array[@]};i++));do
   else echo "you dun goofed";fi
   ((count++))
 done
+for ((i=0;i<${#random_password_binary_array[@]};i++));do
+  if [[ ${i} -lt $((${#random_password_binary_array[@]} / 2)) ]];then random_password_first_half+=(${random_password_binary_array[${i}]});fi
+  if [[ ${i} -ge $((${#random_password_binary_array[@]} / 2)) ]];then random_password_second_half+=(${random_password_binary_array[${i}]});fi
+done
+
+
 echo "##################################################################################################################################################################################"
 echo "
 CHECKPOINT0
@@ -195,14 +204,72 @@ password_int_array=${password_int_array[@]}
 password_binary_array=${password_binary_array[@]}
 password_first_half=${password_first_half[@]}
 password_second_half=${password_second_half[@]}
-key_file=./keys/${o}
+key_file=./keys/${x}
 key_binary_array=${key_binary_array[@]}
 random_password_binary_array=${random_password_binary_array[@]}
+random_password_first_half=${random_password_first_half[@]}
+random_password_second_half=${random_password_second_half[@]}
+input_binary_array=${input_binary_array[@]}
 "
 echo "##################################################################################################################################################################################"
+#check the new password against the file... 
+for ((i=0;i<${#input_binary_array[@]};i++));do
+  if [[ ${count} == ${#random_password_first_half[@]} ]]; then count=0; fi
+    if [[ ${random_password_first_half[${count}]} == 0 && ${random_password_second_half[${count}]} == 0 ]]; then
+      if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${random_password_first_half[${count}]} == 0 ]]; then output_binary_array+=(1); fi
+      if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${random_password_first_half[${count}]} == 1 ]]; then output_binary_array+=(0); fi
+      if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${random_password_first_half[${count}]} == 0 ]]; then output_binary_array+=(0); fi
+      if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${random_password_first_half[${count}]} == 1 ]]; then output_binary_array+=(1); fi
+    elif [[ ${random_password_first_half[${count}]} == 0 && ${random_password_second_half[${count}]} == 1 ]]; then
+      if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${random_password_second_half[${count}]} == 0 ]]; then output_binary_array+=(1); fi
+      if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${random_password_second_half[${count}]} == 1 ]]; then output_binary_array+=(0); fi
+      if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${random_password_second_half[${count}]} == 0 ]]; then output_binary_array+=(0); fi
+      if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${random_password_second_half[${count}]} == 1 ]]; then output_binary_array+=(1); fi
+    elif [[ ${random_password_first_half[${count}]} == 1 && ${random_password_second_half[${count}]} == 0 ]]; then
+     if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${random_password_first_half[${count}]} == 0 ]]; then output_binary_array+=(0); fi
+      if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${random_password_first_half[${count}]} == 1 ]]; then output_binary_array+=(1); fi
+      if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${random_password_first_half[${count}]} == 0 ]]; then output_binary_array+=(1); fi
+      if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${random_password_first_half[${count}]} == 1 ]]; then output_binary_array+=(0); fi
+    elif [[ ${random_password_first_half[${count}]} == 1 && ${random_password_second_half[${count}]} == 1 ]]; then
+      if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${random_password_second_half[${count}]} == 0 ]]; then output_binary_array+=(0); fi
+      if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${random_password_second_half[${count}]} == 1 ]]; then output_binary_array+=(1); fi
+     if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${random_password_second_half[${count}]} == 0 ]]; then output_binary_array+=(1); fi
+      if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${random_password_second_half[${count}]} == 1 ]]; then output_binary_array+=(0); fi
+    else echo "you dun goofed";exit;fi
+    ((count++))
+  done
+
+count=0;cache=""
+for ((i=0;i<=${#output_binary_array[@]};i++));do
+  cache+=${output_binary_array[${i}]}
+  ((count++))
+  if [[ $count == 8 ]];then output_byte_array+=($cache);count=0;cache="";fi
+done
+for i in ${output_byte_array[@]}; do output_int_array+=(`binary-to-int ${i}`);done
+for i in ${output_int_array[@]}; do output_string+=`int-to-char ${i}`;done
+
+if [[ `echo ${output_string} | grep "VALIDVALIDEPICSAUCE"` ]];then
+
+echo "HOLY FUCK STICKERY BATMAN IT WORKS ?!??!11?!2/!3£ this needs to be noticable..."
+else
+  echo "not the mama"
+fi
+echo ${output_string}
+#if [[ -z ${OUTPUT} ]];then
+#    echo "${output_string}" 
+#  elif [[ ! -f ${OUTPUT} ]];then
+#    echo ${output_string} > ${OUTPUT}
+#fi
+
+# only need to keep password binary array and input binary array everything else can die a horrible fiery death
+# and password first / second half not random...
 unset key_binary_array
 unset random_password_binary_array
-done
+unset random_password_first_half
+unset random_password_second_half
+unset output_binary_array
+unset output_string
+#done
 exit
 
 ##########################################################################################################################################################################################
@@ -211,19 +278,6 @@ exit
 # encrypt/decrypt
 ##########################################################################################################################################################################################
 # print debuggery...
-count=0;cache=""
-  for ((i=0;i<=${#output_binary_array[@]};i++));do
-    cache+=${output_binary_array[${i}]}
-    ((count++))
-    if [[ $count == 8 ]];then output_byte_array+=($cache);count=0;cache="";fi
-  done
-  for i in ${output_byte_array[@]}; do output_int_array+=(`binary-to-int ${i}`);done
-  for i in ${output_int_array[@]}; do output_string+=`int-to-char ${i}`;done
-if [[ -z ${OUTPUT} ]];then
-    echo "${output_string}" 
-  elif [[ ! -f ${OUTPUT} ]];then
-    echo ${output_string} > ${OUTPUT}
-fi
 ##########################################################################################################################################################################################
 
 
