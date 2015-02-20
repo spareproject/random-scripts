@@ -9,6 +9,9 @@ this is going to change alot...
 "
 exit ${1} 
 }
+SPLIT=""
+INPUT=""
+OUTPUT=""
 while getopts 'i:o:hde' arg;do
   case ${arg} in
     e) SPLIT=encrypt;;
@@ -26,6 +29,7 @@ if [[ ! -f ${INPUT} ]];then usage 0;fi
 #selecting encrypt...
 if [[ ${SPLIT} == "encrypt" ]];then
 ##########################################################################################################################################################################################
+##########################################################################################################################################################################################
 # take password
 echo -en "password: ";read password;echo ""
 for i in `echo ${password} | grep -o .`;do password_int_array+=(`char-to-int ${i}`);done
@@ -36,6 +40,7 @@ for ((i=0;i<${#password_binary_array[@]};i++));do
 done
 # take input as key...
 key="./keys/key`shuf -i 0-9 -n 1`"
+key="./keys/key1"
 for i in `xxd -p ${key} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do key_binary_array+=(${o});done;done
 # defacto gateway toggle
 for ((i=0;i<${#key_binary_array[@]};i++));do
@@ -80,7 +85,6 @@ key_binary_array=${key_binary_array[@]}
 random_password_binary_array=${random_password_binary_array[@]}
 random_password_first_half=${random_password_first_half[@]}
 random_password_second_half=${random_password_second_half[@]}
-took a human password and made it bigger from a random key...
 "
 echo "##################################################################################################################################################################################"
 ##########################################################################################################################################################################################
@@ -160,11 +164,11 @@ done
 # take the input file...
 if [[ -f ${INPUT} ]];then for i in `xxd -p ${INPUT} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do input_binary_array+=(${o});done;done;fi
 ##########################################################################################################################################################################################
-#for x in `ls ./keys/`;do 
-#if [[ -f ./keys/${x} ]];then for y in `xxd -p ./keys/${x} | grep -o .`;do for z in `hex-to-binary ${y} | grep -o .`;do key_binary_array+=(${z});done;done;fi
 
-for y in `xxd -p ./keys/key3 | grep -o .`;do for z in `hex-to-binary ${y} | grep -o .`;do key_binary_array+=(${z});done;done;fi
-
+for x in `ls ./keys/`;do 
+if [[ -f ./keys/${x} ]];then for y in `xxd -p ./keys/${x} | grep -o .`;do for z in `hex-to-binary ${y} | grep -o .`;do key_binary_array+=(${z});done;done;fi
+#for y in `xxd -p ./keys/key1 | grep -o .`;do for z in `hex-to-binary ${y} | grep -o .`;do key_binary_array+=(${z});done;done;
+count=0
 for ((i=0;i<${#key_binary_array[@]};i++));do
   if [[ ${count} == ${#password_first_half[@]} ]]; then count=0; fi
   if [[ ${password_first_half[${count}]} == 0 && ${password_second_half[${count}]} == 0 ]]; then
@@ -194,8 +198,6 @@ for ((i=0;i<${#random_password_binary_array[@]};i++));do
   if [[ ${i} -lt $((${#random_password_binary_array[@]} / 2)) ]];then random_password_first_half+=(${random_password_binary_array[${i}]});fi
   if [[ ${i} -ge $((${#random_password_binary_array[@]} / 2)) ]];then random_password_second_half+=(${random_password_binary_array[${i}]});fi
 done
-
-
 echo "##################################################################################################################################################################################"
 echo "
 CHECKPOINT0
@@ -213,6 +215,7 @@ input_binary_array=${input_binary_array[@]}
 "
 echo "##################################################################################################################################################################################"
 #check the new password against the file... 
+count=0
 for ((i=0;i<${#input_binary_array[@]};i++));do
   if [[ ${count} == ${#random_password_first_half[@]} ]]; then count=0; fi
     if [[ ${random_password_first_half[${count}]} == 0 && ${random_password_second_half[${count}]} == 0 ]]; then
@@ -238,7 +241,6 @@ for ((i=0;i<${#input_binary_array[@]};i++));do
     else echo "you dun goofed";exit;fi
     ((count++))
   done
-
 count=0;cache=""
 for ((i=0;i<=${#output_binary_array[@]};i++));do
   cache+=${output_binary_array[${i}]}
@@ -247,9 +249,7 @@ for ((i=0;i<=${#output_binary_array[@]};i++));do
 done
 for i in ${output_byte_array[@]}; do output_int_array+=(`binary-to-int ${i}`);done
 for i in ${output_int_array[@]}; do output_string+=`int-to-char ${i}`;done
-
 if [[ `echo ${output_string} | grep "VALIDVALIDEPICSAUCE"` ]];then
-
 echo "HOLY FUCK STICKERY BATMAN IT WORKS ?!??!11?!2/!3£ this needs to be noticable..."
 else
   echo "not the mama"
@@ -260,7 +260,6 @@ echo ${output_string}
 #  elif [[ ! -f ${OUTPUT} ]];then
 #    echo ${output_string} > ${OUTPUT}
 #fi
-
 # only need to keep password binary array and input binary array everything else can die a horrible fiery death
 # and password first / second half not random...
 unset key_binary_array
@@ -268,8 +267,12 @@ unset random_password_binary_array
 unset random_password_first_half
 unset random_password_second_half
 unset output_binary_array
+unset output_byte_array
+unset output_int_array
 unset output_string
-#done
+unset cache
+unset count
+done
 exit
 
 ##########################################################################################################################################################################################
