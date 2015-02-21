@@ -30,7 +30,7 @@ for ((i=0;i<${#password_binary_array[@]};i++));do
 done
 ##########################################################################################################################################################################################
 key="./keys/key`shuf -i 0-9 -n 1`"
-#key="./keys/key1"
+key="./keys/key1"
 for i in `xxd -p ${key} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do key_binary_array+=(${o});done;done
 count=0
 for ((i=0;i<${#key_binary_array[@]};i++));do
@@ -229,7 +229,6 @@ echo "random_password_binary_array=${random_password_binary_array[@]}"
 #echo "input_binary_array=${input_binary_array[@]}"
 #echo "##################################################################################################################################################################################"
   if [[ `echo ${output_string} | grep "VALIDVALIDEPICSAUCE"` ]];then
-    echo ${output_string} > ${OUTPUT}
     echo "eventually"  
   else
     echo "ffs"

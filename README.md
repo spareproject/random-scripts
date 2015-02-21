@@ -1,6 +1,21 @@
 spawncamping-ninja
 ==================
 ##################
+need to stop staying up all night till things are fixed look like ive got two black eyes : /
+random.crypt - sort of works its adding a couple of random chars well 1 and i think it takes the \n
+and tries to convert it to a random character still havent stripped input or reduced the amount
+of repeating code fail
+was looking at sticking the gates in a function file and either passing 3 arrays or passing them
+3 bytes at a time and echo the output into an array would make it easier to read anyway need to fix 
+the random variable names i never normally use intuitive variable names because i dont have tab complete
+when typing them out 
+
+probably going to expand to reading the initial password in from nfc rw (when i buy one) and a nfc ring
+can then just add that stuff to archiso or from usb /shrug 
+
+services going into root tty1 auto login 
+
+##################
 20/2/15 -
 need to split all this... 
 key file only works for archiso booting cant combine them without making it useless for static install
