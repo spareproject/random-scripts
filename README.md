@@ -1,6 +1,10 @@
 spawncamping-ninja
 ==================
 ##################
+not wasting wasting any more time staring at this 
+its adding a random character that sed cant strip to the end of files need to redo this properly 
+
+##################
 nspawn - logic
 if i can pull alot of stuff out of the archiso package and make a default node
 it makes handling any updates and managing it a million times easier 
@@ -89,5 +93,6 @@ doing this works but if network.target exists it fails hard
 need a recursive rootfs checker so i can see what actually changes after boot and poke it more till it does what i want 
 
 updated to 3.18.6-1 and nspawn died a horrible death can only boot any rootfs once 
-boot, shutdown, boot fails... guessing its ram or it wouldnt work after a reboot : / 
+boot, shutdown, boot fails... guessing its ram or it wouldnt work after a reboot : /
+^ turns out i enabled --link-journal=guest 
 
