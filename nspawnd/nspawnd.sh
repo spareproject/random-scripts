@@ -1,14 +1,18 @@
 #!/bin/env bash
 #VARIABLES
-OVERLAY_DIR="/opt/"
-UNION_DIR="/var/lib/container/"
+OVERLAYFS_DIR="/opt/"
+UNIONFS_DIR="/var/lib/container/"
 SOCKET="/tmp/nspawnd.sock"
 OVERLAYFS=()
 UNIONFS=()
 #INIT
-if [[ -S ${SOCKET} ]];then mkfifo ${SOCKET};fi
+if [[ ! -S ${SOCKET} ]];then mkfifo ${SOCKET};fi
+
 #LOOP
 while true;do
+
+
+
   for i in `ls ${OVERLAY_DIR}`;do OVERLAYFS+=(${i});done
   for i in `ls ${UNION_DIR}`;do UNIONFS+=(${i});done
   for i in ${OVERLAYFS[@]};do

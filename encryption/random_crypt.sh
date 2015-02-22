@@ -30,7 +30,6 @@ for ((i=0;i<${#password_binary_array[@]};i++));do
 done
 ##########################################################################################################################################################################################
 key="./keys/key`shuf -i 0-9 -n 1`"
-#key="./keys/key1"
 for i in `xxd -p ${key} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do key_binary_array+=(${o});done;done
 count=0
 for ((i=0;i<${#key_binary_array[@]};i++));do
@@ -118,6 +117,11 @@ if [[ $count == 8 ]];then output_byte_array+=($cache);count=0;cache="";fi
 done
 for i in ${output_byte_array[@]}; do output_int_array+=(`binary-to-int ${i}`);done
 for i in ${output_int_array[@]}; do output_string+=`int-to-char ${i}`;done
+
+# reading from files is creating a trailing character... to difficult to prove with current scripts but its definitly happening
+output_string=`echo ${output_string} | sed 's/.$//'`
+
+
 echo ${output_string} > ${OUTPUT}
 #echo "##################################################################################################################################################################################"
 #echo "CHECKPOINT1"
@@ -228,18 +232,21 @@ echo "random_password_binary_array=${random_password_binary_array[@]}"
 #echo "random_password_second_half=${random_password_second_half[@]}"
 #echo "input_binary_array=${input_binary_array[@]}"
 #echo "##################################################################################################################################################################################"
+
+
+# same again but happening twice...
+output_string=`echo ${output_string} | sed 's/...$//'`
+
+
+
   if [[ `echo ${output_string} | grep "VALIDVALIDEPICSAUCE"` ]];then
-    echo ${output_string} > ${OUTPUT}
+    echo ${output_string} | sed 's/VALIDVALIDEPICSAUCE//' | sed 's/...$//' > ${OUTPUT}
     echo "eventually"  
   else
     echo "ffs"
   fi
-  echo ${output_string}
-  #if [[ -z ${OUTPUT} ]];then
-  #    echo "${output_string}" 
-  #  elif [[ ! -f ${OUTPUT} ]];then
-  #    echo ${output_string} > ${OUTPUT}
-  #fi
+
+  echo ${output_string} | sed 's/VALIDVALIDEPICSAUCE//' | sed 's/...$//'
   # only need to keep password binary array and input binary array everything else can die a horrible fiery death
   # and password first / second half not random...
   unset key_binary_array[@]
@@ -252,13 +259,6 @@ echo "random_password_binary_array=${random_password_binary_array[@]}"
   unset output_string
   unset i
   unset count
-  
-  echo "debuggery
-  i: ${i}
-  cache: ${cache}
-  count: ${count}
-  "
-  
 done
 ##########################################################################################################################################################################################
 ##########################################################################################################################################################################################

@@ -1,0 +1,6 @@
+
+./random_crypt.sh -e -i ./files/test -o ./files/test.crypt 
+./random_crypt.sh -d -i ./files/test.crypt -i ./files/test.clean 
+
+^ still getting random character addition and it only occurs when reading from file
+cant debug it without making some pretty hefty changes and this thing is already to fragile
