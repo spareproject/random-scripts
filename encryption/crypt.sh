@@ -22,7 +22,7 @@ if [[ -z ${PASSWORD} ]];then
   for i in `echo ${password} | grep -o .`;do password_int_array+=(`char-to-int ${i}`);done
   for i in ${password_int_array[@]};do for o in `int-to-binary ${i} | grep -o .`;do password_binary_array+=(${o});done;done
 elif [[ -f ${PASSWORD} ]];then
-  for i in `xxd -p ${PASSWORD} | tr -d '\n' | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do password_binary_array+=(${o});done;done
+  for i in `xxd -p ${PASSWORD} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do password_binary_array+=(${o});done;done
 fi
 for ((i=0;i<${#password_binary_array[@]};i++));do
   if [[ ${i} -lt $((${#password_binary_array[@]} / 2)) ]];then password_first_half_array+=(${password_binary_array[${i}]});fi
@@ -35,7 +35,8 @@ if [[ -z ${INPUT} ]];then
   for i in `echo $input | grep -o .`;do input_int_array+=(`char-to-int ${i}`);done
   for i in ${input_int_array[@]};do for o in `int-to-binary ${i} | grep -o .`;do input_binary_array+=(${o});done;done
 elif [[ -f ${INPUT} ]];then
-  for i in `xxd -p ${INPUT} | tr -d '\n' | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do input_binary_array+=(${o});done;done
+  #for i in `xxd -p ${INPUT} | tr -d '\n' | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do input_binary_array+=(${o});done;done
+  for i in `xxd -p ${INPUT} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do input_binary_array+=(${o});done;done
 fi
 ##########################################################################################################################################################################################
 # encrypt/decrypt

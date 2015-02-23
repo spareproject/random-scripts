@@ -61,8 +61,6 @@ done
 for i in ${output_byte_array[@]}; do output_int_array+=(`binary-to-int ${i}`);done
 for i in ${output_int_array[@]}; do output_string+=`int-to-char ${i}`;done
 #output_string=`echo ${output_string} | sed 's/.$//'`
-
-
 echo -n ${output_string} > ${OUTPUT}
 #echo "##################################################################################################################################################################################"
 #echo "CHECKPOINT1"

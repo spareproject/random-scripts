@@ -59,8 +59,6 @@ for u in ${output_int_array[@]}; do output_string+=`int-to-char ${u}`;done
 #echo "random_password_second_half=${random_password_second_half[@]}"
 #echo "input_binary_array=${input_binary_array[@]}"
 #echo "##################################################################################################################################################################################"
-# same again but happening twice...
-#output_string=`echo ${output_string} | sed 's/....$//'`
 if [[ `echo ${output_string} | grep "VALIDVALIDEPICSAUCE"` ]];then
 echo -n ${output_string} | sed 's/VALIDVALIDEPICSAUCE//' > ${OUTPUT}
 echo "eventually"  
