@@ -32,10 +32,12 @@ first_half: ${password_first_half[@]}
 second_half: ${password_second_half[@]}
 ##########################################################################################################################################################################################
 "
-testing=`gateway input_binary_array[@] password_first_half[@] password_second_half[@]`
-echo "testing... ${testing}"
-for i in `echo ${testing} | grep -o .`;do testing_array+=(${i});done
-echo ${testing_array[@]}
+testing=(`gateway input_binary_array[@] password_first_half[@] password_second_half[@]`)
+#gateway input_binary_array[@] password_first_half[@] password_second_half[@]
+
+#echo "testing... ${testing}"
+#for i in `echo ${testing} | grep -o .`;do testing_array+=(${i});done
+echo ${testing[@]}
 
 #gateway input_binary_array[@] password_first_half[@] password_second_half[@]
 
