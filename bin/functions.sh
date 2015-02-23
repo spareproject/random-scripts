@@ -40,3 +40,45 @@ if [[ ${1} == "d" ]];then echo 1101;fi
 if [[ ${1} == "e" ]];then echo 1110;fi
 if [[ ${1} == "f" ]];then echo 1111;fi
 }
+
+function gateway {
+input_binary_array=(${!1})
+password_first_half=(${!2})
+password_second_half=(${!3})
+count=0
+for ((i=0;i<${#input_binary_array[@]};i++));do
+  if [[ ${count} == ${#password_first_half[@]} ]]; then count=0; fi
+  if [[ ${password_first_half[${count}]} == 0 && ${password_second_half[${count}]} == 0 ]]; then
+    if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${password_first_half[${count}]} == 0 ]]; then output_binary_array+=1; fi
+    if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${password_first_half[${count}]} == 1 ]]; then output_binary_array+=0; fi
+    if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${password_first_half[${count}]} == 0 ]]; then output_binary_array+=0; fi
+    if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${password_first_half[${count}]} == 1 ]]; then output_binary_array+=1; fi
+  elif [[ ${password_first_half[${count}]} == 0 && ${password_second_half[${count}]} == 1 ]]; then
+    if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${password_second_half[${count}]} == 0 ]]; then output_binary_array+=1; fi
+    if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${password_second_half[${count}]} == 1 ]]; then output_binary_array+=0; fi
+    if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${password_second_half[${count}]} == 0 ]]; then output_binary_array+=0; fi
+    if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${password_second_half[${count}]} == 1 ]]; then output_binary_array+=1; fi
+  elif [[ ${password_first_half[${count}]} == 1 && ${password_second_half[${count}]} == 0 ]]; then
+    if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${password_first_half[${count}]} == 0 ]]; then output_binary_array+=0; fi
+    if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${password_first_half[${count}]} == 1 ]]; then output_binary_array+=1; fi
+    if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${password_first_half[${count}]} == 0 ]]; then output_binary_array+=1; fi
+    if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${password_first_half[${count}]} == 1 ]]; then output_binary_array+=0; fi
+  elif [[ ${password_first_half[${count}]} == 1 && ${password_second_half[${count}]} == 1 ]]; then
+    if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${password_second_half[${count}]} == 0 ]]; then output_binary_array+=0; fi
+    if [[ ${input_binary_array[${i}]} == 0 ]] && [[ ${password_second_half[${count}]} == 1 ]]; then output_binary_array+=1; fi
+    if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${password_second_half[${count}]} == 0 ]]; then output_binary_array+=1; fi
+    if [[ ${input_binary_array[${i}]} == 1 ]] && [[ ${password_second_half[${count}]} == 1 ]]; then output_binary_array+=0; fi
+  else echo "you dun goofed...";fi
+  ((count++))
+done
+echo ${output_binary_array}
+}
+
+
+
+
+
+
+
+
+

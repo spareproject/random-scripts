@@ -2,8 +2,7 @@ spawncamping-ninja
 ==================
 ##################
 not wasting wasting any more time staring at this 
-its adding a random character that sed cant strip to the end of files need to redo this properly 
-
+its adding a random character that sed cant strip to the end of files need to redo this properly
 ##################
 nspawn - logic
 if i can pull alot of stuff out of the archiso package and make a default node
