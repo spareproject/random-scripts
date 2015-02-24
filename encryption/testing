@@ -1,12 +1,25 @@
+#!/bin/env bash
 
-./crypt.sh -i files/test -o files/test.crypt
-./crypt.sh -i files/test.crypt -o files/test.clean
+if [[ -f files/test.crypt ]];then rm files/test.crypt;fi
+if [[ -f files/test.clean ]];then rm files/test.clean;fi
 
-had to split this for debugging
-./random_crypt.sh -e -i ./files/test -o ./files/test.crypt 
-./random_crypt.sh -d -i ./files/test.crypt -i ./files/test.clean 
-
-./random_encrypt -i files/test -o files/test.crypt
-./random_decrypt -i files/test.crypt -o filest/test.clean
+./crypt.sh -e -i files/test -o files/test.crypt
+echo "###################################################################################################################################################################################"
+hexdump files/test.crypt
+echo "###################################################################################################################################################################################"
+sleep 1
+./crypt.sh -d -i files/test.crypt -o files/test.clean
+echo "###################################################################################################################################################################################"
+cat files/test.clean;echo ""
+echo "###################################################################################################################################################################################"
+#./crypt.sh -i files/test -o files/test.crypt
+#./crypt.sh -i files/test.crypt -o files/test.clean
+#
+#had to split this for debugging
+#./random_crypt.sh -e -i ./files/test -o ./files/test.crypt 
+#./random_crypt.sh -d -i ./files/test.crypt -i ./files/test.clean 
+#
+#./random_encrypt -i files/test -o files/test.crypt
+#./random_decrypt -i files/test.crypt -o filest/test.clean
 
 

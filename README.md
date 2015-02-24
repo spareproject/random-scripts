@@ -1,9 +1,33 @@
 spawncamping-ninja
 ==================
 ##################
+not again
 
+was going to port this all to c but thats even more time wasted not finishing this thing yet again
+had the random password crypt / decrypt working then forgot the total fail of never trying this using
+file input with multiple lines grep ignores \n 0a so regutting the original clean version of crypt.sh
+to accomodate it 
+
+i was only doing this to play with networking using burner lists of entry / exit nodes over an encrypted udp connection
+which gets pretty complicated if your spewing data over random ips / ports and never recieving a reply from the same location
+or sending one out over the same node + port knock session / key exchange authentication already done a lot of theory crafting on this
+and netcat reads line by line so spewing this out over the network is easy still never scripted a public / private key so probably 
+going to look into that 
+
+the whole crypting a file is only to fix the lulz unencrypted keys all over the place problem i rebuild archiso atleast every sunday
+and really want this in there by then so regurgitating this idea back into yet another language is fail 
+i even broke the original version that actually did one liners but i could write this in my sleep so /shrug 
+
+still basing the entire thing on compression adds alot of complexity to knowing when youve bruteforced the original string
+
+and still havent found a way to pump dnscrypt over tor without multiple nodes or telling the kernel to allow outbound traffic to be redirected to localhost
+which sounded like a bad idea going to random pick a dnssec/dnscrypt enabled resolver on boot
+torsocks should work but it doesnt like the original request being pumped through as udp and fails 
+
+ive been raging at this thing for hours so the codes probably not that friendly 
+
+##################
 still has one random [ that should be an r but food
-
 crypt.sh - default with out additions
 random_crypt.sh - takes input against random key pick to increase password length
 random_decrypt.sh - split of the above because debug
@@ -13,7 +37,7 @@ going to write a bruteforce script to actually test how valid this entire thing 
 sensible thing to do would be honeypot a couple of half finished scripts so google searches point people in the wrong direction
 but it isnt hard to make a few tweaks to increase how computationally hard this will be to crack and i would rather know
 ##################
-not wasting wasting any more time staring at this 
+not wasting any more time staring at this 
 its adding a random character that sed cant strip to the end of files need to redo this properly
 ##################
 nspawn - logic
