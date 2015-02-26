@@ -23,7 +23,7 @@ for ((i=0;i<${#password_binary_array[@]};i++));do
 done
 ##########################################################################################################################################################################################
 key="./keys/key`shuf -i 0-9 -n 1`"
-for i in `xxd -p ${key} | tr -d '\n'| grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do key_binary_array+=(${o});done;done
+for i in `xxd -p ${key} |  grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do key_binary_array+=(${o});done;done
 random_password_binary_array=(`gateway key_binary_array[@] password_first_half[@] password_second_half[@]`)
 for ((i=0;i<${#random_password_binary_array[@]};i++));do
   if [[ ${i} -lt $((${#random_password_binary_array[@]} / 2)) ]];then random_password_first_half+=(${random_password_binary_array[${i}]});fi
@@ -37,9 +37,9 @@ done
 #echo "password_binary_array=${password_binary_array[@]}"
 #echo "password_first_half=${password_first_half[@]}"
 #echo "password_second_half=${password_second_half[@]}"
-echo "key_file=${key}"
+#echo "key_file=${key}"
 #echo "key_binary_array=${key_binary_array[@]}"
-echo "random_password_binary_array=${random_password_binary_array[@]}"
+#echo "random_password_binary_array=${random_password_binary_array[@]}"
 #echo "random_password_first_half=${random_password_first_half[@]}"
 #echo "random_password_second_half=${random_password_second_half[@]}"
 #echo "##################################################################################################################################################################################"
@@ -58,16 +58,20 @@ cache+=${output_binary_array[${i}]}
 ((count++))
 if [[ $count == 8 ]];then output_byte_array+=($cache);count=0;cache="";fi
 done
-for i in ${output_byte_array[@]}; do output_int_array+=(`binary-to-int ${i}`);done
-for i in ${output_int_array[@]}; do output_string+=`int-to-char ${i}`;done
-#output_string=`echo ${output_string} | sed 's/.$//'`
-echo -n ${output_string} > ${OUTPUT}
+for i in ${output_byte_array[@]};do output_int_array+=(`binary-to-int ${i}`);done
+for i in ${output_int_array[@]};do
+  if [[ ${i} == 10 ]];then
+    output_string="${output_string}\n"
+  fi
+  output_string+=`int-to-char ${i}`
+done
+echo -en ${output_string} > ${OUTPUT}
 #echo "##################################################################################################################################################################################"
 #echo "CHECKPOINT1"
-echo "input_binary_array length=${#input_binary_array[@]}" #${input_binary_array[@]}"
+#echo "input_binary_array length=${#input_binary_array[@]}" #${input_binary_array[@]}"
 #echo "valid_int_array=${valid_int_array[@]}"
 #echo "input_binary_array=${input_binary_array[@]}"
-echo "output_binary_array length=${#output_binary_array[@]}"
+#echo "output_binary_array length=${#output_binary_array[@]}"
 #echo "output_byte_array=${output_byte_array[@]}"
 #echo "output_int_array=${output_int_array[@]}"
 #echo "output_string=${output_string[@]}"

@@ -24,7 +24,7 @@ for ((m=0;m<${#password_binary_array[@]};m++));do
   if [[ ${m} -lt $((${#password_binary_array[@]} / 2)) ]];then password_first_half+=(${password_binary_array[${m}]});fi
   if [[ ${m} -ge $((${#password_binary_array[@]} / 2)) ]];then password_second_half+=(${password_binary_array[${m}]});fi
 done
-if [[ -f ${INPUT} ]];then for i in `xxd -p ${INPUT} | tr -d '\n' | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do input_binary_array+=(${o});done;done;fi
+if [[ -f ${INPUT} ]];then for i in `xxd -p ${INPUT} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do input_binary_array+=(${o});done;done;fi
 ##########################################################################################################################################################################################
 ##########################################################################################################################################################################################
 for x in `ls ./keys/`;do 
@@ -42,8 +42,13 @@ for ((r=0;r<=${#output_binary_array[@]};r++));do
   ((count++))
   if [[ $count == 8 ]];then output_byte_array+=($cache);count=0;cache="";fi
 done
-for t in ${output_byte_array[@]}; do output_int_array+=(`binary-to-int ${t}`);done
-for u in ${output_int_array[@]}; do output_string+=`int-to-char ${u}`;done
+for t in ${output_byte_array[@]};do output_int_array+=(`binary-to-int ${t}`);done
+for u in ${output_int_array[@]};do
+  if [[ ${u} == 10 ]];then
+    output_string="${output_string}\n"
+  fi
+  output_string+=`int-to-char ${u}`
+done
 ##########################################################################################################################################################################################
 #echo "##################################################################################################################################################################################"
 #echo "CHECKPOINT0"
