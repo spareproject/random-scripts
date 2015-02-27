@@ -2,6 +2,9 @@ spawncamping-ninja
 ==================
 current...
 ##################
+should probably note you can literally change the ordering of 8 numbers in this thing have it look 
+like its doing something impressive, but really just bit flips the entire input regardless of password...
+##################
 compressions still all in my head have a bad habit of not trusting anything
 and im pretty sure the notes / code is a total cluster fuck 
 ##################
