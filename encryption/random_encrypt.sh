@@ -4,48 +4,41 @@
 ##########################################################################################################################################################################################
 function usage { echo -e "${0} - help\nthis is going to change alot...";exit ${1}; }
 SPLIT="";INPUT="";OUTPUT="";
-while getopts 'i:o:h' arg;do
+while getopts 'i:o:p:h' arg;do
   case ${arg} in
     i) INPUT=${OPTARG};;
     o) OUTPUT=${OPTARG};;
+    p) PASSWORD=${OPTARGS};;
     h) usage 0;;
     *) usage 1;;
   esac
 done
-if [[ -z ${INPUT} && -z ${OUTPUT} && -f ${OUTPUT} && ! -f ${INPUT} ]];then usage 1;fi
+if [[ -z ${INPUT} && -z ${OUTPUT} && ! -f ${OUTPUT} && -f ${INPUT} ]];then usage 1;fi
 ##########################################################################################################################################################################################
+##########################################################################################################################################################################################
+if [[ -z ${PASSWORD} ]];then
 echo -en "password: ";read password;echo ""
 for i in `echo ${password} | grep -o .`;do password_int_array+=(`char-to-int ${i}`);done
 for i in ${password_int_array[@]};do for o in `int-to-binary ${i} | grep -o .`;do password_binary_array+=(${o});done;done
+elif [[ -f ${PASSWORD} ]];then
+  for i in `xxd -p ${PASSWORD} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do password_binary_array+=(${o});done;done
+fi
 for ((i=0;i<${#password_binary_array[@]};i++));do
   if [[ ${i} -lt $((${#password_binary_array[@]} / 2)) ]];then password_first_half+=(${password_binary_array[${i}]});fi
   if [[ ${i} -ge $((${#password_binary_array[@]} / 2)) ]];then password_second_half+=(${password_binary_array[${i}]});fi
 done
 ##########################################################################################################################################################################################
 key="./keys/key`shuf -i 0-9 -n 1`"
-for i in `xxd -p ${key} |  grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do key_binary_array+=(${o});done;done
+for i in `xxd -p ${key} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do key_binary_array+=(${o});done;done
 random_password_binary_array=(`gateway key_binary_array[@] password_first_half[@] password_second_half[@]`)
 for ((i=0;i<${#random_password_binary_array[@]};i++));do
   if [[ ${i} -lt $((${#random_password_binary_array[@]} / 2)) ]];then random_password_first_half+=(${random_password_binary_array[${i}]});fi
   if [[ ${i} -ge $((${#random_password_binary_array[@]} / 2)) ]];then random_password_second_half+=(${random_password_binary_array[${i}]});fi
 done
 ##########################################################################################################################################################################################
-#echo "##################################################################################################################################################################################"
-#echo "CHECKPOINT0"
-#echo "password=${password}"
-#echo "password_int_array=${password_int_array[@]}"
-#echo "password_binary_array=${password_binary_array[@]}"
-#echo "password_first_half=${password_first_half[@]}"
-#echo "password_second_half=${password_second_half[@]}"
-#echo "key_file=${key}"
-#echo "key_binary_array=${key_binary_array[@]}"
-#echo "random_password_binary_array=${random_password_binary_array[@]}"
-#echo "random_password_first_half=${random_password_first_half[@]}"
-#echo "random_password_second_half=${random_password_second_half[@]}"
-#echo "##################################################################################################################################################################################"
 ##########################################################################################################################################################################################
 # take input
-if [[ -f ${INPUT} ]];then for i in `xxd -p ${INPUT} | tr -d '\n' | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do input_binary_array+=(${o});done;done;fi
+if [[ -f ${INPUT} ]];then for i in `xxd -p ${INPUT} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do input_binary_array+=(${o});done;done;fi
 for i in `echo "VALIDVALIDEPICSAUCE" | grep -o .`;do valid_int_array+=(`char-to-int ${i}`);done
 for i in ${valid_int_array[@]};do for o in `int-to-binary ${i} | grep -o .`;do input_binary_array+=(${o});done;done
 ##########################################################################################################################################################################################

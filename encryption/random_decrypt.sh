@@ -4,31 +4,35 @@
 ##########################################################################################################################################################################################
 function usage { echo -e "${0} - help\nthis is going to change alot...";exit ${1}; }
 SPLIT="";INPUT="";OUTPUT="";
-while getopts 'i:o:h' arg;do
+while getopts 'i:o:p:h' arg;do
   case ${arg} in
     i) INPUT=${OPTARG};;
     o) OUTPUT=${OPTARG};;
+    p) PASSWORD=${OPTARG};;
     h) usage 0;;
     *) usage 1;;
   esac
 done
-if [[ -z ${INPUT} && -z ${OUTPUT} && -f ${OUTPUT} && ! -f ${INPUT} ]];then usage 0;fi
-if [[ -f ${OUTPUT} ]];then usage 0;fi
-if [[ ! -f ${INPUT} ]];then usage 0;fi
+if [[ -z ${INPUT} && -z ${OUTPUT} && ! -f ${OUTPUT} && -f ${INPUT} ]];then usage 0;fi
 ##########################################################################################################################################################################################
 ##########################################################################################################################################################################################
+if [[ -z ${PASSWORD} ]];then
 echo -en "password: ";read password;echo ""
 for i in `echo ${password} | grep -o .`;do password_int_array+=(`char-to-int ${i}`);done
 for i in ${password_int_array[@]};do for o in `int-to-binary ${i} | grep -o .`;do password_binary_array+=(${o});done;done
+elif [[ -f ${PASSWORD} ]];then 
+   for i in `xxd -p ${PASSWORD} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do password_binary_array+=(${o});done;done
+fi
 for ((m=0;m<${#password_binary_array[@]};m++));do
   if [[ ${m} -lt $((${#password_binary_array[@]} / 2)) ]];then password_first_half+=(${password_binary_array[${m}]});fi
   if [[ ${m} -ge $((${#password_binary_array[@]} / 2)) ]];then password_second_half+=(${password_binary_array[${m}]});fi
 done
+##########################################################################################################################################################################################
 if [[ -f ${INPUT} ]];then for i in `xxd -p ${INPUT} | grep -o .`;do for o in `hex-to-binary ${i} | grep -o .`;do input_binary_array+=(${o});done;done;fi
 ##########################################################################################################################################################################################
 ##########################################################################################################################################################################################
 for x in `ls ./keys/`;do 
-if [[ -f ./keys/${x} ]];then for y in `xxd -p ./keys/${x} | tr -d '\n' | grep -o .`;do for z in `hex-to-binary ${y} | grep -o .`;do key_binary_array+=(${z});done;done;fi
+if [[ -f ./keys/${x} ]];then for y in `xxd -p ./keys/${x} | grep -o .`;do for z in `hex-to-binary ${y} | grep -o .`;do key_binary_array+=(${z});done;done;fi
 random_password_binary_array=(`gateway key_binary_array[@] password_first_half[@] password_second_half[@]`)
 for ((w=0;w<${#random_password_binary_array[@]};w++));do
   if [[ ${w} -lt $((${#random_password_binary_array[@]} / 2)) ]];then random_password_first_half+=(${random_password_binary_array[${w}]});fi
@@ -65,13 +69,8 @@ done
 #echo "input_binary_array=${input_binary_array[@]}"
 #echo "##################################################################################################################################################################################"
 if [[ `echo ${output_string} | grep "VALIDVALIDEPICSAUCE"` ]];then
-echo -n ${output_string} | sed 's/VALIDVALIDEPICSAUCE//' > ${OUTPUT}
-echo "eventually"  
-echo ${output_string} | sed 's/VALIDVALIDEPICSAUCE//'
-for i in `echo ${output_string}`;do echo ${i};done
-
-else
-  echo "ffs"
+echo -en ${output_string} | sed 's/VALIDVALIDEPICSAUCE//' > ${OUTPUT}
+usage 0
 fi
 # only need to keep password binary array and input binary array everything else can die a horrible fiery death
 # and password first / second half not random...

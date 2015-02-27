@@ -1,6 +1,9 @@
 spawncamping-ninja
 ==================
 ##################
+not yet but incase i forget `time { echo "i know its still slow" }`
+
+##################
 not again
 
 was going to port this all to c but thats even more time wasted not finishing this thing yet again
