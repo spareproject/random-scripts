@@ -8,7 +8,7 @@ while getopts 'i:o:p:h' arg;do
   case ${arg} in
     i) INPUT=${OPTARG};;
     o) OUTPUT=${OPTARG};;
-    p) PASSWORD=${OPTARGS};;
+    p) PASSWORD=${OPTARG};;
     h) usage 0;;
     *) usage 1;;
   esac
