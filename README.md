@@ -2,6 +2,52 @@ spawncamping-ninja
 ==================
 current...
 ##################
+
+was planning on stacking a load of ascii maps into a single deck with random insert swap to mapped value
+pull the mapped value rinse repeat till it polls the entire list if its empty re add the values start again
+totally underestimated how many messages i would have to check to find the original value 
+going to stick a single keymap into crypt.sh and work on something else for a while 
+
+so problems...
+to make the key map viable it cant repeat the same character substitution well it can just not frequently and not in a way that leaves a pattern
+couple of ways to achieve this but they all fall back to the original key map as a point of failure 
+
+incrementing a keymap shuffle based on the number of messages sent, counting
+i send you a message perform random shuffle on keymap
+you read the message perform random shuffle on keymap
+you send the message perform random shuffle on keymap
+etc etc...
+the random shuffle becomes a problem because there isnt really any entropy in the shuffle
+if the original key maps are the same this shuffle should increment them both to give the same value
+
+incrementing a keymap shuffle based on timestamps...
+i dont like the idea of time stamps personally i hate coding things this way because time is a human concept that computers dont need to give any fucks about
+could just use multiple incrementing gears for every X spins Y spins for every Y spins Z spins etc etc, not coding them to 24 60 60 would be a better start
+then the logic falls to the above for increment based on exchange or a seperate quartz controlled clock
+
+both of these still fail hard once the message reaches a certain length it renders the entire thing pointless need to combine both of them
+
+realistically i need to work on the first method multiple stacks of ascii...
+combined with a hashing algorithm that can check the validity of the message as its being solved
+for example
+
+index 1 == 64   out of... 123 084 192 011 120 003 009 
+index 2 == 127  out of... 013 067 201 123 207 002 078
+
+hash 1 == index 1 <insert math here> index 2
+
+thats pretty much the only viable way to scan through the horde of messages that the method produces 
+
+but going to clean this up a bit then leave it getting slightly bored and have other things to break
+
+probably going to clean compression up want to say ive alteast coded a compression algorithm its just getting 
+the time to waste on this knowing
+a) better versions exist b) no ones ever going to use it c) i really need to get a job d) if it actually works ill probably be murdered in my sleep...
+
+did originally start looking at any type of encryption that could be viable for high traffic small packet networking and this is just more bloat
+was hoping to find something that would be computationally expensive to solve based on expanding into an unknown variable because its better for networking in general
+
+##################
 i really want to make a raspi based wifi access point + mesh that can use nfc to do key exchange 
 between the device used probably android app so every client on the access point is using a unique crypto stream
 
