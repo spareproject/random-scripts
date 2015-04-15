@@ -1,0 +1,100 @@
+#!/bin/env bash
+########################################################################################
+
+########################################################################################
+iptables -F
+iptables -X
+iptables -t filter -F
+iptables -t filter -X
+iptables -t nat -F
+iptables -t nat -X
+iptables -t mangle -F
+iptables -t mangle -X
+iptables -t raw -F
+iptables -t raw -X
+iptables -t security -F
+iptables -t security -X
+########################################################################################
+iptables -P INPUT DROP
+iptables -P OUTPUT ACCEPT
+iptables -P FORWARD DROP
+########################################################################################
+iptables -N LO
+iptables -N KNOCK_ONE
+iptables -N KNOCK_TWO
+iptables -N KNOCK_THREE
+iptables -N KNOCK_FOUR
+iptables -N SESSION
+iptables -N BLOCKED
+iptables -N BRIDGE
+iptables -N INTERNAL
+########################################################################################
+iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
+iptables -A INPUT -j BLOCKED
+iptables -A INPUT -j KNOCK_ONE
+
+iptables -A INPUT -m recent --name SESSION --rcheck -j BRIDGE
+ not in the right place...
+iptables -A INPUT -i lo         -m conntrack --ctstate NEW -j LO
+iptables -A INPUT -m recent --name DROPPED 
+iptables -A INPUT -j LOG --log-prefix "DROPPED" --log-level 6
+########################################################################################
+iptables -A INPUT -m recent --name KNOCK_TWO    --rcheck --seconds 60 --reap -j KNOCK_TWO   
+iptables -A INPUT -m recent --name KNOCK_THREE  --rcheck --seconds 60 --reap -j KNOCK_THREE
+iptables -A INPUT -m recent --name KNOCK_FOUR   --rcheck --seconds 60 --reap -j KNOCK_FOUR
+iptables -A INPUT -m recent --name SESSION      --rcheck --seconds 60 --reap -j SESSION # implies a timeout? havent decided yet
+iptables -A KNOCK_THREE -m recent --name KNOCK_TWO   --remove
+iptables -A KNOCK_FOUR  -m recent --name KNOCK_THREE --remove
+iptables -A SESSION     -m recent --name KNOCK_FOUR  --remove 
+########################################################################################
+iptables -A KNOCK_ONE   -p udp --dport ${knock_one}   -s ${REMOTE_ADDR} -m recent --set --name KNOCK_TWO
+iptables -A KNOCK_TWO   -p udp --dport ${knock_two}   -s ${REMOTE_ADDR} -m recent --set --name KNOCK_THREE
+iptables -A KNOCK_THREE -p udp --dport ${knock_three} -s ${REMOTE_ADDR} -m recent --set --name KNOCK_FOUR
+iptables -A KNOCK_FOUR  -p udp --dport ${knock_four}  -s ${REMOTE_ADDR} -m recent --set --name SESSION
+iptables -A SESSION -p tcp -d ${LOCAL_ADDR} --dport 8080 -s ${REMOTE_ADDR} -j ACCEPT
+iptables -A SESSION -p udp -d ${LOCAL_ADDR} --dport 8080 -s ${REMOTE_ADDR} -j ACCEPT
+########################################################################################
+# main service port...
+
+#
+
+
+
+# allow if in recent / passed port knock rules only service running ssh access...
+
+iptables -A INPUT -p tcp --dport 12723 -j DROP
+
+# drop anything that doesnt know how to talk to your server full service blacklist
+
+iptables -A INPUT -m recent --name DROPPED --rcheck --seconds 360 -j DROP
+
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED --ctproto tcp -j ACCEPT #socket_hitcount
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED --ctproto udp -j ACCEPT #socket_hitcount
+########################################################################################
+
+iptables -A INPUT -j DROP
+########################################################################################
+iptables -A LO -p udp -d 127.0.0.1 --dport 53 -j ACCEPT         # dns port unbound or iptables forward to 9053 tordns
+iptables -A LO -p udp -d 127.0.0.1 --dport 9053 -j ACCEPT       # tor dns port
+iptables -A LO -p tcp -d 127.0.0.1 --dport 8080 -j ACCEPT       # nginx webserver port
+iptables -A LO -p tcp -d 127.0.0.1 --dport 9050 -j ACCEPT       # tor socks port
+iptables -A LO -p tcp -d 127.0.0.1 --dport 9091 -j ACCEPT       # transmission
+iptables -A LO -p tcp -d 127.0.0.1 --dport 5037 -j ACCEPT       # android adb
+iptables -A LO -p tcp -d 127.0.0.1 --dport 6010:6023 -j ACCEPT  # sshx display ports
+iptables -A LO -j LOG --log-prefix "LO" --log-level 6
+iptables -A LO -j DROP
+########################################################################################
+iptables -A BRIDGE -p tcp --dport 8080 -j ACCEPT
+iptables -A BRIDGE -p tcp --dport 12723 -j ACCEPT
+iptables -A BRIDGE -p tcp --dport 12724 -j ACCEPT
+iptables -A BRIDGE -p tcp --dport 12725 -j ACCEPT
+iptables -A BRIDGE -j LOG --log-prefix "BRIDGE" --log-level 6
+iptables -A BRIDGE -j DROP
+########################################################################################
+iptables -A INTERNAL -p tcp --dport 8080 -j ACCEPT
+iptables -A INTERNAL -p tcp --dport 12723 -j ACCEPT
+iptables -A INTERNAL -p tcp --dport 12724 -j ACCEPT
+iptables -A INTERNAL -p tcp --dport 12725 -j ACCEPT
+iptables -A INTERNAL -j LOG --log-prefix "INTERNAL" --log-level 6
+iptables -A INTERNAL -j DROP
+########################################################################################

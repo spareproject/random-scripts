@@ -1,0 +1,7 @@
+
+logic how i would run remote access to home network... not that i ever would
+
+1 setup a port knock before leaving 
+2 generate two gnupg keys
+3 setup a listening service that decrypts 
+
