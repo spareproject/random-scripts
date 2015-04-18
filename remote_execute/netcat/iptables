@@ -48,8 +48,8 @@ iptables -A INPUT -m recent --name KNOCK_THREE  --rcheck --seconds 60 --reap -j 
 iptables -A INPUT -m recent --name KNOCK_FOUR   --rcheck --seconds 60 --reap -j KNOCK_FOUR
 iptables -A INPUT -m recent --name AUTH         --rcheck --seconds 60 --reap -j AUTH
 ########################################################################################
-iptables -A KNOCK_ONE   -p udp --dport ${KNOCK_ONE}   -m recent   --set --name KNOCK_TWO
-iptables -A KNOCK_TWO   -p udp --dport ${KNOCK_TWO}   -m recent   --set --name KNOCK_THREE
+iptables -A KNOCK_ONE   -p udp --dport ${KNOCK_ONE}   -m recent --set --name KNOCK_TWO
+iptables -A KNOCK_TWO   -p udp --dport ${KNOCK_TWO}   -m recent --set --name KNOCK_THREE
 iptables -A KNOCK_THREE -p udp --dport ${KNOCK_THREE} -m recent --set --name KNOCK_FOUR
 iptables -A KNOCK_FOUR  -p udp --dport ${KNOCK_FOUR}  -m recent --set --name AUTH
 iptables -A KNOCK_THREE -m recent --name KNOCK_TWO   --remove
@@ -60,12 +60,9 @@ iptables -A AUTH -p udp --dport ${REMOTE_EXEC} -j ACCEPT
 ########################################################################################
 
 iptables -A INPUT -p udp --dport ${REMOTE_KNOCK} -j ACCEPT
-iptables -A INPUT -p tcp --dport ${REMOTE_KNOCK} -j ACCEPT
 iptables -A INPUT -p udp --dport ${REMOTE_EXEC} -j DROP
-iptables -A INPUT -p tcp --dport ${REMOTE_EXEC} -j DROP
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED --ctproto tcp -j ACCEPT
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED --ctproto udp -j ACCEPT
-
 
 ########################################################################################
 
