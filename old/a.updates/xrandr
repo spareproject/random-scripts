@@ -1,0 +1,2 @@
+xrandr --output DFP11 --auto --pos 1920x0 
+xrandr --output HDMI3 --auto --pos 1920x0 

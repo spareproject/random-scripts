@@ -1,0 +1,3 @@
+# lsusb idVendor:idProduct
+ATTR{idVendor}=="26bd", ATTR{idProduct}=="9917", ATTR{serial}=="070144EA39B2F958", RUN+="/mnt/test.sh"
+
