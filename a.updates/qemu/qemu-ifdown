@@ -1,5 +1,0 @@
-#!/bin/env bash
-BRIDGE=${1}
-ip link set ${BRIDGE} down
-brctl delif bridge ${BRIDGE}
-ip link del dev ${BRIDGE}
