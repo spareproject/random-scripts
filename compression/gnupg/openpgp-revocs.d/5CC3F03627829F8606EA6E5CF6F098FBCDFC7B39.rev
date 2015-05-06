@@ -1,0 +1,33 @@
+This is a revocation certificate for the OpenPGP key:
+
+pub  rsa4096/CDFC7B39 2015-05-06
+      Key fingerprint = 5CC3 F036 2782 9F86 06EA  6E5C F6F0 98FB CDFC 7B39
+uid                  aaaaa
+
+Use it to revoke this key in case of a compromise or loss of
+the secret key.  However, if the secret key is still accessible,
+it is better to generate a new revocation certificate and give
+a reason for the revocation.
+
+To avoid an accidental use of this file, a colon has been inserted
+before the 5 dashes below.  Remove this colon with a text editor
+before making use of this revocation certificate.
+
+:-----BEGIN PGP PUBLIC KEY BLOCK-----
+Version: GnuPG v2
+Comment: This is a revocation certificate
+
+iQIfBCABCAAJBQJVSX9KAh0AAAoJEPbwmPvN/Hs5dG4P+wWuet7fyVoWnFLC03zd
+SVd0OQA0y5Bq+bPHjOUHQUtbDDQWoJd9Dj22NjGp7ZZDzVJYHgPKoM4HJ4HNOlmh
+tJC0jAiAG/faVY0QCLSf4zxi+dKtpMQUyPrdaJyozqlGIG03gEpSETOUeGMFx6qk
+fY3IK+CiVS0ly95OGNgHKZy/w437l0b4gSQ2RWbPVvb3V5kWm84z49P7FZnF2oUj
+pYWUuZv1zokxbpgUirsIfY/dnfFiJuqllHgoBYB+i/JtgYlmCbfnhsvH13Apfx3y
+SfXhblzh993h0+s/FF6Nv49WFOXwjKyslHmR/GZ6gswqr+ipfNtbWPDZVsysf+Mu
+KJQZngEFipqLCPCddIlOv/JSthiK4/87whFfClMWPSCvGv38RkArV7OXgDC51bjb
+XfTQ33H6OL4gS2zHKpT7X6mTlGRMCNCc6beDMjZRY4lb9PiddKqKJ17FusN+iOLC
+/Z9GJAWVYCHoHuY216ZwnzIdzrIxKdMOerpcaXxFWReq8vAQZQ9Z+T1H4SrLcigb
+treJHXzf1bmkhv+DJ2KmF2outl6OCYswb6LS2eqMujR0Cxo/F23b5jatkR4cmgqo
+c0xet9o48ei45T+KM0pYukus0IWESVwVcO9pVA5/Wqv4UfE9r9NWUiQslqkNex2o
+urBHE9apgRwCICfBVcohrCzO
+=jG6R
+-----END PGP PUBLIC KEY BLOCK-----

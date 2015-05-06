@@ -4,14 +4,20 @@ clear;cat /etc/banner
 ###############################################################################################################################################################################################################
 . ../bin/functions.sh
 ###############################################################################################################################################################################################################
-message=$(cat /dev/random | fold -w 1024 | head -n 1)
-for i in $(echo $message | grep -o .); do message_int_array+=(`char-to-int "${i}"`); done;
-for i in ${message_int_array[@]};do for o in `int-to-binary ${i} | grep -o .`;do message_binary_array+=(${o});done;done
-echo "#####################"
-hexdump -C <<< $message
-echo "${message_int_array[@]}"
-echo "${message_binary_array[@]}"
-echo "#####################"
+if ask "use test case...(y) / generate a test case (n)";then
+  message="sooooooo thisssss isssss toooootally cheating oooooooo you dont sssssssay"
+  for i in `echo $message | grep -o .`; do message_int_array+=(`ord "${i}"`); done;
+  for i in ${message_int_array[@]}; do message_binary_string+=$(binary ${i}); done;
+  for i in `echo ${message_binary_string} | grep -o .`; do message_binary_array+=(${i}); done 
+  STRING=${message_binary_string}
+else
+  echo -en "\nenter message: "; read message
+  for i in `echo $message | grep -o .`; do message_int_array+=(`ord "${i}"`); done;
+  for i in ${message_int_array[@]}; do message_binary_string+=$(binary ${i}); done;
+  for i in `echo ${message_binary_string} | grep -o .`; do message_binary_array+=(${i}); done
+  STRING=${message_binary_string}
+fi
+echo "#####################"; echo $STRING; echo "#####################";
 ###############################################################################################################################################################################################################
 # add all the patterns to an associative array
 #declare -A UPS3=();UPS3_CACHE="";UPS3_COUNT=0

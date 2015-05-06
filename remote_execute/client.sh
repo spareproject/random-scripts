@@ -3,6 +3,10 @@ SERVER=10.0.0.4
 KNOCK=10237
 EXEC=10239
 
+# because it hangs on serving the old knock... 
+nc -u ${SERVER} ${KNOCK} <<< fu &
+sleep 1
+kill $! &>/dev/null
 nc -u ${SERVER} ${KNOCK} <<< fu > /home/admin/server_knock &
 sleep 1
 kill $! &>/dev/null
