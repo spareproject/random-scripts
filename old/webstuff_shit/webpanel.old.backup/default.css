@@ -1,0 +1,69 @@
+/***************************************************************************************************************************************************************************************************************************************/
+body{
+  z-index:0;
+  height:100%; width:100%; text-align:left;
+  margin:auto;
+  background-color:black; color:green;
+  font-family:"Lucida Console", Monaco, monospace;
+  overflow:auto;
+}
+#top-left{
+position:fixed;top:0px;left:0px;z-index:2;
+background-color:black;color:green;border:1px solid green;  
+margin:7px 0px 0px 7px;padding:1px;
+}
+#top-right{
+position:fixed;top:0px;right:0px;z-index:2;
+background-color:black;color:green;border: 1px solid green;
+margin:7px 7px 0px 0px;padding:1px;
+}
+#bottom-left{
+position:fixed;bottom:0px;left:0px;z-index:2;
+background-color:black;color:green;border: 1px solid green;
+margin:0px 0px 7px 7px;padding:1px;line-height:27px;
+height:27px;width:433px;
+}
+#bottom-right{
+position:fixed;bottom:0px;right:0px;z-index:2;
+background-color:black;color:green;border: 1px solid green;
+height:27px;width:433px;margin:0px 7px 7px 0px;padding:1px;overflow:auto;line-height:27px;
+}
+#map{
+z-index:1;
+height:100%;width:100%;margin:0px;padding:0px;
+}
+#spacer{ height:47px; width:100%; }
+
+.home{ background-color:green; color:black; }
+.clock{ background-color:green; color:black; }
+
+#panel{ height:33px; width:100%; line-height:27px; margin:0px; padding:0px;}
+.top{ position:fixed; top:0; left:0; z-index:2; background-color:black; color:green; }
+.bottom{ position:fixed; bottom:0; left:0; z-index:2; text-align:center;background-color:green;color:black; }
+
+a{ margin:3px; padding:0px; text-decoration:none;background-color:black;color:green; } a:hover{ background-color:green;color:black; }
+table{ margin:0px;padding:0px;}
+tr{ margin:0px;padding:0px; } 
+td{ margin:0px;padding:0px;background-color:black;color:green; }
+#top-right td:hover{background-color:green; color:black;}
+#top-left td:hover{background-color:green; color:black;}
+/***************************************************************************************************************************************************************************************************************************************/
+/***************************************************************************************************************************************************************************************************************************************/
+.left{ float:left }
+.right{ float:right }
+.center{ margin:auto; }
+p,h1,h2,h3,h4,h5,h6 { margin:0px; padding:0px; }
+
+form{ padding:0px; margin:0px; }
+fieldset { border:1px green solid; margin:13px;padding:3px; }
+legend { background-color:black; color:green;}
+input{ margin:2px; padding:2px; background-color:green; color:black; border:none; }
+
+/*****************************************************/
+::-webkit-input-placeholder { color: black; }
+:-moz-placeholder { color: black; }
+::-moz-placeholder { color: black; }
+:-ms-input-placeholder { color: black; }
+/*****************************************************/
+
+

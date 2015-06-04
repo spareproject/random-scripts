@@ -1,0 +1,82 @@
+body{
+  z-index:-1;
+  height:100%; width:80%; text-align:left;
+  margin:auto;
+  background-color:black; color:green;
+  font-family:"Lucida Console", Monaco, monospace;
+  overflow:auto;
+}
+#panel_top{ 
+  position:fixed; top:0; left:0; z-index:0;
+  height:27px; width:100%; line-height:27px;
+  margin:0px; padding:0px;
+  background-color:black; color:green;
+}
+#panel_bottom{
+  position:fixed; bottom:0; left:0; z-index:0; text-align:center;
+  height:27px; width:100%; line-height:27px;
+  margin:0px; padding:0px;
+  background-color:black; color:green;
+}
+
+/* guessing im suppose to set on hover and change the z-index for menus?  */
+/* cant seem to use classes in bash?*/
+
+.left{ float:left }
+.right{ float:right }
+.center{ margin:auto; }
+.queue{ z-index:-2; }
+.invert{ background-color:green; color:black; }
+#spacer{ height:27px; width:100%; }
+p,h1,h2,h3,h4,h5,h6 { margin:0px; padding:0px; }
+form{ padding:0px; margin:0px; }
+fieldset { border:1px green solid; margin:0px; } /* 1st is height 2nd is left right 3rd is bottom*/
+legend { background-color:black; color:green;}
+
+
+input{ margin:0px; padding:1px; background-color:green; color:black; border:none; font-size:130%; }
+a{ margin:0px; padding:0px; text-decoration:none; background-color:black; color:green; }
+a:hover{ background-color:green; color:black; }
+
+ul{ margin:0px; padding:0px; }
+li{ margin:0px; padding:0px; display:inline; list-style-type:none; color:green; }
+
+table{
+margin:0px;
+padding:0px;
+}
+tr{ 
+margin:0px;
+padding:0px;
+}
+td{
+margin:0px;
+padding:0px;
+}
+.pineapple{
+  display:inline;
+  height:133px; width:27%; 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* will hopefully die in a fire because?  */
+/*****************************************************/
+::-webkit-input-placeholder { color: black; }
+:-moz-placeholder { color: black; }
+::-moz-placeholder { color: black; }
+:-ms-input-placeholder { color: black; }
+/*****************************************************/
+
+

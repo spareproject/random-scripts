@@ -1,0 +1,41 @@
+
+/***************************************************************************************************************************************************************************************************************************************/
+body{
+  z-index:0;
+  height:100%; width:97%; text-align:left;
+  margin:auto;
+  background-color:black; color:green;
+  font-family:"Lucida Console", Monaco, monospace;
+  overflow:auto;
+}
+/***************************************************************************************************************************************************************************************************************************************/
+#panel{ height:27px; width:100%; line-height:27px; margin:0px; padding:0px;}
+.top{ position:fixed; top:0; left:0; z-index:1; background-color:black; color:green; }
+.bottom{ position:fixed; bottom:0; left:0; z-index:1; text-align:center;background-color:green;color:black; }
+#panel a{ margin:0px; padding:0px; text-decoration:none;color:green; }#panel a:hover{ color:black; }
+#panel table{ margin:0px;padding:0px;border: 1px solid green; }
+#panel tr{ margin:0px;padding:0px; }
+#panel td{ margin:0px;padding:0px 6px 0px; }#panel td:hover{ background-color:green; color:black; }
+#spacer{ height:43px; width:100%; }
+/***************************************************************************************************************************************************************************************************************************************/
+/***************************************************************************************************************************************************************************************************************************************/
+.left{ float:left }
+.right{ float:right }
+.center{ margin:auto; }
+.queue{ z-index:-2; }
+.invert{ background-color:green; color:black; }
+p,h1,h2,h3,h4,h5,h6 { margin:0px; padding:0px; }
+form{ padding:0px; margin:0px; }
+fieldset { border:1px green solid; margin:0px; }
+legend { background-color:black; color:green;}
+
+input{ margin:0px; padding:0px; background-color:green; color:black; border:none; }
+
+/*****************************************************/
+::-webkit-input-placeholder { color: black; }
+:-moz-placeholder { color: black; }
+::-moz-placeholder { color: black; }
+:-ms-input-placeholder { color: black; }
+/*****************************************************/
+
+

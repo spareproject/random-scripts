@@ -1,0 +1,59 @@
+/***************************************************************************************************************************************************************************************************************************************/
+body{
+  z-index:0;
+  height:100%; width:100%; text-align:left;
+  margin:auto;
+  background-color:black; color:green;
+  font-family:"Lucida Console", Monaco, monospace;
+  overflow:auto;
+}
+#top-left{
+position:fixed;top:0px;left:0px;z-index:2;
+background-color:black;color:green;border:1px solid green;  
+height:27px;width:333px;margin:7px 0px 0px 7px;padding:1px;line-height:27px;
+}
+#top-right{
+position:fixed;top:0px;right:0px;z-index:2;
+background-color:black;color:green;border: 1px solid green;
+height:27px;width:333px;margin:7px 7px 0px 0px;padding:1px;line-height:27px;
+}
+#bottom-left{
+position:fixed;bottom:0px;left:0px;z-index:2;
+background-color:black;color:green;border: 1px solid green;
+height:27px;width:433px;margin:0px 0px 7px 7px;padding:1px;line-height:27px;
+}
+#bottom-right{
+position:fixed;bottom:0px;right:0px;z-index:2;
+background-color:black;color:green;border: 1px solid green;
+height:23%;width:433px;margin:0px 7px 7px 0px;padding:1px;overflow:auto;
+}
+#map{
+z-index:1;
+height:100%;width:100%;margin:0px;padding:0px;
+}
+#spacer{ height:43px; width:100%; } /* can still blag spacer to make the same floating tables as before but show the full image underneath / gief transparency - will fuck up map 100% settings? */
+
+#panel a{ margin:0px; padding:0px; text-decoration:none;color:green; }#panel a:hover{ color:black; }
+#panel table{ margin:0px;padding:0px;border: 1px solid green; }
+#panel tr{ margin:0px;padding:0px; }
+#panel td{ margin:0px;padding:0px 6px 0px; }#panel td:hover{ background-color:green; color:black; }
+/***************************************************************************************************************************************************************************************************************************************/
+/***************************************************************************************************************************************************************************************************************************************/
+.left{ float:left }
+.right{ float:right }
+.center{ margin:auto; }
+.invert{ background-color:green; color:black; }
+p,h1,h2,h3,h4,h5,h6 { margin:0px; padding:0px; }
+form{ padding:0px; margin:0px; }
+fieldset { border:1px green solid; margin:0px; }
+legend { background-color:black; color:green;}
+input{ margin:0px; padding:0px; background-color:green; color:black; border:none; }
+
+/*****************************************************/
+::-webkit-input-placeholder { color: black; }
+:-moz-placeholder { color: black; }
+::-moz-placeholder { color: black; }
+:-ms-input-placeholder { color: black; }
+/*****************************************************/
+
+

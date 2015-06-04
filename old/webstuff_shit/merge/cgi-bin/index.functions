@@ -1,0 +1,152 @@
+#!/bin/bash
+##########################################################################################################################################################################################################################################
+function cgi { echo -e "Content-type:text/html\n\n"; }
+function html { echo "<!DOCTYPE html><html><head><meta http-equiv='Refresh' content='57;url='webpanel.cgi'/><meta charset='utf-8'/><link rel='stylesheet' type='text/css' href='/default.css'><title>webpanel</title></head><body>"; }
+function header { echo "
+<div id=header>
+<a class='left menu' href=/cgi-bin/index.cgi>spareProject</a>
+<a class='right menu' href=/cgi-bin/system.cgi>system</a>
+<a class='right menu' href=/cgi-bin/container.cgi>container</a>
+</div>
+<div id=content>"; }
+function footer { echo "</div></body></html>"; }
+function index.io { 
+  echo stub
+}
+function index.monitor {
+  echo stub
+}
+function session { 
+echo "<fieldset><legend>session</legend>"
+KEY=`cat /dev/random | tr -cd 'a-zA-Z0-9' | fold -w 32 | head -n 1`
+MAP="an array to hold char map 0-255 X number of times shuffled"
+URL_UUID=`cat /dev/random | tr -cd 'a-zA-Z0-9' | fold -w 32 | head -n 1`
+CHALLENGE=`cat /dev/random | tr -cd 'a-zA-Z0-9' | fold -w 64 | head -n 1`
+RESPONSE=`cat /dev/random | tr -cd 'a-zA-Z0-9' | fold -w 64 | head -n 1`
+echo "
+<form action=/cgi-bin/index.cgi method=get><table>
+<tr><td>proxy_</td><td>127.0.0.1</td></tr>
+<tr><td>server_</td><td>${SERVER_ADDR}:${SERVER_PORT}</td></tr>
+<tr><td>remote_</td><td>${REMOTE_ADDR}:${REMOTE_PORT}</td></tr>
+<tr><td>key_</td><td>${KEY}</td></tr>
+<tr><td>map_</td><td>${MAP}</td></tr>
+<tr><td>url_</td><td><a href=/cgi-bin/session/${URL_UUID}>https://10.0.0.1:8080/cgi-bin/session/${URL_UUID}</a></td></tr>
+<tr><td>challenge_</td><td>${CHALLENGE_UUID}</td></tr>
+<tr><td>diffie_</td><td></td></tr>
+<tr><td>submit_</td><td><input type=submit name=session value=session /></td></tr>
+</table>
+</form>
+</fieldset>
+"
+}
+function auth {
+echo "
+<fieldset><legend>auth</legend>
+${USER}: `id ${USER}`
+</fieldset>
+"
+}
+function ssl_fieldset {
+  echo "<fieldset><legend>ssl_fieldset</legend>"
+  echo "</fieldset>"
+}
+###########################################################################################################################################################################################################################################
+declare -A POST
+declare -A GET
+function input {
+  read -n ${CONTENT_LENGTH} -r POST_
+  if [[ ! -z ${POST_} ]]
+    then
+      POST_="${POST_}&";KEY="";CACHE=""
+      for i in `echo ${POST_} | grep -o .`;do
+        if [[ "${i}" == "=" ]];then KEY=$CACHE;CACHE=""
+        elif [[ "$i" == "&" ]];then POST[${KEY}]=${CACHE};CACHE=""
+        else CACHE+=${i};fi
+      done
+  fi
+  if [[ ! -z ${QUERY_STRING} ]]
+    then
+      GET_="${QUERY_STRING}&";KEY="";CACHE=""
+      for i in `echo ${GET_} | grep -o .`;do
+        if [[ "${i}" == "=" ]]; then KEY=$CACHE;CACHE=""
+        elif [[ "$i" == "&" ]]; then GET[${KEY}]=${CACHE};CACHE=""
+        else CACHE+=${i};fi
+      done
+  fi
+}
+function output {
+if [[ ${#POST[@]} -eq 0 ]];then echo -n "post: ";for i in ${!POST[@]};do echo "${i}:${POST[${i}]}";done;fi
+if [[ ${#GET[@]} -eq 0 ]];then echo -n "get: ";for i in ${!GET[@]};do echo "${i}:${GET[${i}]}";done;fi
+}
+function fcgiparams_fieldset {
+  FCGIPARAMS=( QUERY_STRING REQUEST_METHOD CONTENT_TYPE CONTENT_LENGTH SCRIPT_NAME REQUEST_URI DOCUMENT_URI DOCUMENT_ROOT SERVER_PROTOCOL HTTPS GATEWAY_INTERFACE SERVER_SOFTWARE REMOTE_ADDR REMOTE_PORT SERVER_ADDR SERVER_PORT SERVER_NAME REDIRECT_STATUS )
+  FCGIPARAMSVALUES=( $QUERY_STRING $REQUEST_METHOD $CONTENT_TYPE $CONTENT_LENGTH $SCRIPT_NAME $REQUEST_URI $DOCUMENT_URI $DOCUMENT_ROOT $SERVER_PROTOCOL $HTTPS $GATEWAY_INTERFACE $SERVER_SOFTWARE $REMOTE_ADDR $REMOTE_PORT $SERVER_ADDR $SERVER_PORT $SERVER_NAME $REDIRECT_STATUS )
+  echo "<fieldset><legend><h3><b>$FUNCNAME</b></h3></legend><table>"
+  for ((i=0;i<${#FCGIPARAMS[@]};++i));do echo "<tr><td>${FCGIPARAMS[$i]}</td><td>${FCGIPARAMSVALUES[$i]}</td></tr>";done 
+  echo "</table></fieldset>"
+}
+##########################################################################################################################################################################################
+IMAGEFS=/mnt/container/image/
+UNIONFS=/var/lib/container/
+function container.io {
+echo "<fieldset><legend>container.input</legend>"
+echo "<form class=left action=/cgi-bin/container.cgi method=get><select name=image>"
+for i in `ls -A ${IMAGEFS}`;do echo "<option>${i}</option>";done
+echo "<input type=text name=overlay /><input type=submit name=get value=get /></form>"
+if [[ ${GET[image]} && ${GET[overlay]} ]];then echo "<p class=right>[ image:${GET[image]} ] [ overlay:${GET[overlay]} ]</p>"
+elif [[ ${GET[image]} ]];then echo "<p class=right>[ image:${GET[image]} ]</p>";fi
+echo "</fieldset><hr>"; }
+
+function container.monitor { echo "<fieldset><legend>container.monitor</legend><table><tr><td>imagefs</td><td>rootfs</td><td>overlayfs</td><td>unionfs</td><td>machinefs</td></tr>"
+for i in `ls ${IMAGEFS}`;do
+TEMP=${IMAGEFS}${i}/rootfs/
+echo "<tr><td>${i}</td><td>"
+  if [[ -d ${TEMP} ]];then
+  if [[ `ls -A ${TEMP}` == `ls -A / | grep -v lost\+found` ]];then
+  echo "yes";else echo "disrepair";fi
+  else echo "no";fi
+echo "</td><td>"
+TEMP=${IMAGEFS}${i}; COUNT=0
+for i in `ls -A ${TEMP}`;do ((COUNT++));done
+echo $((${COUNT}-1))
+echo "</td><td>"
+TEMP=${UNIONFS}${i}; COUNT=0
+for i in `df -h`;do if [[ ${i} == ${TEMP}.* ]];then ((COUNT++));fi;done;echo "${COUNT}";
+echo "<td>"
+COUNT=0; for i in `machinectl`;do if [[ ${i} == ${i}.* ]];then ((COUNT++));fi;done;echo ${COUNT}
+echo "</td>"
+echo "</tr>"
+done
+echo "</table></fieldset><hr>"; }
+##########################################################################################################################################################################################
+
+function system.io { echo "<fieldset><legend>system.input</legend>
+<form class=left action=/cgi-bin/system.cgi method=get>
+<input type=text name=service value=service_array />
+<input type=text name=request value=request_array />
+<input type=submit name=get value=get /></form>"
+if [[ ${GET[service]} && ${GET[request]} ]];then echo "<p class=right>[ service:${GET[service]} ] [ command:${GET[request]} ]</p>"
+elif [[ ${GET[service]} ]];then echo "<p class=right>[ service:${GET[service]} ]</p>";fi
+echo "</fieldset><hr>"
+}
+function system.monitor { echo "<fieldset><legend>system.monitor</legend>"
+TOGGLES=( sshd.service sshd-spareproject.service sshd-admin.service nginx.service fcgiwrap.socket tor.service dhcpd4 )
+echo "<table>"
+for i in ${TOGGLES[@]};do TEMP=()
+for o in `systemctl -a | grep ${i}`;do TEMP+=(${o});done
+echo "
+<tr>
+<td>${i}</td>
+<td>${TEMP[3]}</td>
+<td><a href=#>start</a></td>
+<td><a href=#>stop</a></td>
+<td><a href=#>status</a></td>
+</tr>
+"
+done
+echo "</table></fieldset><hr>"
+}
+##########################################################################################################################################################################################
+
+
+

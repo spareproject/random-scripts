@@ -1,0 +1,88 @@
+/*where the fuck did this go****************************************************************************************************************************************************************************************/
+body{
+height:100%;
+width:100%;
+margin:0;
+padding:0;
+background-color:lightgrey;
+font-size:2vh;
+}
+/****************************************************************************************************************************************************************************************/
+#header{
+width:100%;
+margin:0;
+padding:0;
+color:white;
+background-color:darkslategrey;
+box-shadow:0 0 1hmin black;
+overflow:auto;
+}
+/****************************************************************************************************************************************************************************************/
+#content{
+width:97%;
+margin-left:1%;
+padding:0;
+overflow:auto;
+}
+/****************************************************************************************************************************************************************************************/
+a{
+margin:0;
+padding:0;
+text-decoration:none;
+display:inline-block;
+color:black;
+text-align:center;
+}
+a:hover{
+background-color:grey;
+}
+.menu{
+height:100%;
+width:7em;
+margin:3px;
+padding:0;
+color:white;
+text-decoration:none;
+display:inline-block;
+text-align:center;
+}
+button{
+font-size:1vmax;
+}
+input{
+font-size:1vmax;
+border:1px solid darkslategrey;
+margin:0;
+padding:0;
+}
+select{
+font-size:1vmax;
+border:1px solid darkslategrey;
+background-color:white;
+}
+/****************************************************************************************************************************************************************************************/
+.left{ float:left; }
+.right{ float:right; }
+.center{ margin:auto;text-align:center; }
+p,h1,h2,h3,h4,h5,h6 { margin:0; padding:0; }
+/***************************************************************************************************************************************************************************************************************************************/
+.shadow{
+text-shadow: 2px 2px black;
+}
+table{
+border:0px solid black;
+}
+tr{
+border:0px solid black;
+}
+td{
+border:1px solid black;
+}
+fieldset{
+margin:1vmin;
+padding:1vmin;
+}
+legend{
+margin:0;
+padding:0;
+}

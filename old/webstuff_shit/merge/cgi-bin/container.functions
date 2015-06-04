@@ -1,0 +1,107 @@
+#!/bin/bash
+##########################################################################################################################################################################################################################################
+function cgi { echo -e "Content-type:text/html\n\n"; }
+function html { echo "<!DOCTYPE html><html><head><meta http-equiv='Refresh' content='57;url='webpanel.cgi'/><meta charset='utf-8'/><link rel='stylesheet' type='text/css' href='/default.css'><title>webpanel</title></head><body>"; }
+function header {
+echo "
+<div id=header >
+<a class='left menu' href=/cgi-bin/index.cgi>spareProject</a>
+<a class='right menu' href=/cgi-bin/system.cgi>system</a>
+<a class='right menu' href=/cgi-bin/container.cgi>container</a>
+<a class='right menu' href=/cgi-bin/image.cgi>image</a>
+<a class='right menu' href=/cgi-bin/node.cgi>node</a>
+</div>"
+echo "<div id=content>"
+}
+function footer {
+echo "</div>"
+ echo "</body></html>"
+}
+# erm well wtf its all gone tits up anyway 
+function ftw {
+  echo "
+this needs to set IMAGEFS ROOTFS OVERLAYFS UNIONFS NODE and then o shiny gui
+"
+}
+
+###########################################################################################################################################################################################################################################
+declare -A qsvariables #query_string_variables
+declare -A qspvariables #query_string_post_variables
+
+function input {
+  read QUERY_STRING_POST
+  if [ ! -z $QUERY_STRING_POST ]
+    then
+      QUERY_STRING_POST="${QUERY_STRING_POST}&"
+      for i in `echo  $QUERY_STRING_POST | grep -o .`; do
+        if [[ "$i" == "=" ]]; then KEY=$CACHE; CACHE=""; continue; fi
+        if [[ "$i" == "&" ]]; then qspvariables[${KEY}]=${CACHE}; CACHE=""; continue; fi
+        CACHE+=${i}
+      done
+  fi
+  if [ ! -z $QUERY_STRING ]
+    then
+      echo "${QUERY_STRING}<br>" >> /home/nginx/webpanel/cgi-bin/get.log
+      QUERY_STRING="${QUERY_STRING}&"
+      for i in `echo  $QUERY_STRING | grep -o .`; do
+        if [[ "$i" == "=" ]]; then KEY=$CACHE; CACHE=""; continue; fi
+        if [[ "$i" == "&" ]]; then qsvariables[${KEY}]=${CACHE}; CACHE=""; continue; fi
+        CACHE+=${i}
+      done
+  fi
+}
+function output {
+  
+}
+
+function variables_fieldset {
+  echo "<fieldset><legend><h3><b>${FUNCNAME}</b></h3></legend><table>"
+  if [ ! -z $QUERY_STRING_POST ]; then for i in "${!qspvariables[@]}"; do echo "<tr><td>${i}</td><td>${qspvariables[$i]} </td></tr>"; done; fi
+  if [ ! -z $QUERY_STRING ]; then for i in "${!qsvariables[@]}"; do echo "<tr><td>${i}</td><td>${qsvariables[$i]} </td></tr>"; done; fi  
+  echo "</table></fieldset>"
+}
+function log_fieldset {
+  echo "<fieldset><legend><h3><b>$FUNCNAME</b></h3></legend>"
+  echo "<fieldset><legend><h4>get.log</h4></legend>"
+  while read line; do echo -e "${line}\n";done < /home/nginx/webpanel/cgi-bin/get.log
+  echo "</fieldset>"
+  echo "<fieldset><legend><h4>post.log</h4></legend>"
+  while read line; do echo -e "${line}\n";done < /home/nginx/webpanel/cgi-bin/post.log
+  echo "</fieldset>"
+  echo "</fieldset>"
+}
+
+function fcgiparams_fieldset {
+  FCGIPARAMS=( QUERY_STRING REQUEST_METHOD CONTENT_TYPE CONTENT_LENGTH SCRIPT_NAME REQUEST_URI DOCUMENT_URI DOCUMENT_ROOT SERVER_PROTOCOL HTTPS GATEWAY_INTERFACE SERVER_SOFTWARE REMOTE_ADDR REMOTE_PORT SERVER_ADDR SERVER_PORT SERVER_NAME REDIRECT_STATUS )
+  FCGIPARAMSVALUES=( $QUERY_STRING $REQUEST_METHOD $CONTENT_TYPE $CONTENT_LENGTH $SCRIPT_NAME $REQUEST_URI $DOCUMENT_URI $DOCUMENT_ROOT $SERVER_PROTOCOL $HTTPS $GATEWAY_INTERFACE $SERVER_SOFTWARE $REMOTE_ADDR $REMOTE_PORT $SERVER_ADDR $SERVER_PORT $SERVER_NAME $REDIRECT_STATUS )
+  echo "<fieldset><legend><h3><b>$FUNCNAME</b></h3></legend><table>"
+  for ((i=0;i<${#FCGIPARAMS[@]};++i)); do echo "<tr><td>${FCGIPARAMS[$i]}</td><td>${FCGIPARAMSVALUES[$i]}</td></tr>"; done 
+  echo "</table></fieldset>"
+}
+
+function get_fieldset {
+echo "
+<fieldset><legend><h3><b>$FUNCNAME</b></h3></legend><form action='/cgi-bin/webpanel.cgi' method='get'><table><tr>
+<td><input type='text' name='get_fieldset'></td>
+<td><input type='submit' name='submit' value='submit'>
+</td></tr></table></form></fieldset>
+"
+}
+function post_fieldset {
+echo "
+<fieldset><legend><h3><b>$FUNCNAME</b></h3></legend><form action='/cgi-bin/webpanel.cgi' method='post'><table><tr>
+<td><input type='text' name='post_fieldset'></td>
+<td><input type='submit' name='submit' value='submit'></td>
+</tr></table></form></fieldset>
+"
+}
+function clear_fieldset {
+echo "
+<fieldset><legend><h3><b>$FUNCNAME</b></h3></legend><form action='/cgi-bin/webpanel.cgi' method='post'><table><tr>
+<td><input type='submit' name='click' value='clear'></td>
+</tr></table></form></fieldset>
+"
+}
+###########################################################################################################################################################################################################################################
+
+

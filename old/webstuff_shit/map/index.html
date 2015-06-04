@@ -1,0 +1,49 @@
+<!-- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv='Refresh' content='27;url='index.html'/>
+<meta charset='utf-8'/>
+<link rel='stylesheet' type='text/css' href='default.css'>
+<title>map</title>
+</head>
+<body>
+<!-- ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ -->
+
+<script>
+function cnvs_getCoordinates(e){
+x=e.clientX;
+y=e.clientY;
+document.getElementById("top-right").innerHTML="Coordinates: (" + x + "," + y + ")";
+}
+function cnvs_clearCoordinates(){
+document.getElementById("top-rigth").innerHTML="";
+}
+function plot(a,b){
+var c = document.getElementById("map");
+var ctx = c.getContext("2d");
+ctx.fillStyle = "#FF0000";
+ctx.beginPath();
+ctx.arc(a,b,1,0,2*Math.PI);
+ctx.fill();
+}
+</script>
+
+<canvas id=map width="360" height="180" onmousemove="cnvs_getCoordinates(event)" onmouseout="cnvs_clearCoordinates()"></canvas>
+<div id=top-left><h3><b>-180,-90 / 180,90</b></h3></div>
+<div id=top-right onmousemove="cnvs_getCoordinates(event)" onmouseout="cnvs_clearCoordinates()"></div>
+<div id=bottom-left><h3><b>insert functionality output here...</b></h3></div>
+<div id=bottom-right><h3><b>iptables Blocked chain...</b></h3> </div>
+<script>plot(23,45)</script>
+<script>
+var c = document.getElementById("map");
+var ctx = c.getContext("2d");
+ctx.fillStyle = "#FF0000";
+ctx.beginPath();
+ctx.arc(100,100,1,0,2*Math.PI);
+ctx.fill();
+</script>
+
+</body>
+</html>
+

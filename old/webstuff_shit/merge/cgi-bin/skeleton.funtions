@@ -1,0 +1,4 @@
+#!/bin/env bash
+function skeleton {
+  echo "found it"
+}
